@@ -168,6 +168,7 @@
             this.editServiceButton.TabIndex = 3;
             this.editServiceButton.Text = "Edit";
             this.editServiceButton.UseVisualStyleBackColor = true;
+            this.editServiceButton.Click += new System.EventHandler(this.editServiceButton_Click);
             // 
             // deleteServiceButton
             // 
@@ -178,6 +179,7 @@
             this.deleteServiceButton.TabIndex = 2;
             this.deleteServiceButton.Text = "-";
             this.deleteServiceButton.UseVisualStyleBackColor = true;
+            this.deleteServiceButton.Click += new System.EventHandler(this.deleteServiceButton_Click);
             // 
             // newServiceButton
             // 
@@ -192,10 +194,6 @@
             // 
             // servicesLB
             // 
-            this.servicesLB.Items.AddRange(new object[] {
-            "Ventrilo",
-            "Srcds",
-            "Apache"});
             this.servicesLB.Location = new System.Drawing.Point(12, 25);
             this.servicesLB.Name = "servicesLB";
             this.servicesLB.Size = new System.Drawing.Size(123, 139);

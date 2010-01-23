@@ -15,6 +15,20 @@ namespace NetTunnel
         {
             InitializeComponent();
             channelsLB.Items.Add(LobbyPage.Text); // Init list box
+
+            // Populate with a few values
+            servicesLB.Items.Add( KnownServices.get( "Apache" ) );
+            servicesLB.Items.Add( KnownServices.get( "Ventrilo" ) );
+        }
+
+        public void addService(object service)
+        {
+            servicesLB.Items.Add(service);
+        }
+
+        public void removeService(object service)
+        {
+            servicesLB.Items.Remove(service);
         }
 
         private void servicesLB_SelectedIndexChanged(object sender, EventArgs e)
@@ -66,7 +80,7 @@ namespace NetTunnel
                 page.Text = channel;
                 page.UseVisualStyleBackColor = true;
 
-                channelsLB.Items.Add(channel.ToLower());
+                channelsLB.Items.Add(channel);
             }
 
             chatTabControl.SelectedTab = page;
@@ -100,7 +114,30 @@ namespace NetTunnel
 
         private void newServiceButton_Click(object sender, EventArgs e)
         {
-            var serviceWindow = new ServiceWindow();
+            var serviceWindow = new ServiceWindow( this, null );
+            serviceWindow.Show();
+        }
+
+        private void deleteServiceButton_Click(object sender, EventArgs e)
+        {
+            if (servicesLB.SelectedItem == null)
+            {
+                MessageBox.Show("You must select an item first");
+                return;
+            }
+
+            servicesLB.Items.Remove(servicesLB.SelectedItem);
+        }
+
+        private void editServiceButton_Click(object sender, EventArgs e)
+        {
+            if (servicesLB.SelectedItem == null)
+            {
+                MessageBox.Show("You must select an item first");
+                return;
+            }
+
+            var serviceWindow = new ServiceWindow(this,  (Service)servicesLB.SelectedItem);
             serviceWindow.Show();
         }
     }

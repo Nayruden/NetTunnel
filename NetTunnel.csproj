@@ -8,8 +8,8 @@
     <ProjectGuid>{9F23C430-4FA5-4B66-B89F-2D3A9DCB7126}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WindowsFormsApplication1</RootNamespace>
-    <AssemblyName>WindowsFormsApplication1</AssemblyName>
+    <RootNamespace>NetTunnel</RootNamespace>
+    <AssemblyName>NetTunnel</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -50,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="defs.cs" />
     <Compile Include="helpers.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
@@ -76,6 +77,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="ServiceWindow.resx">
       <DependentUpon>ServiceWindow.cs</DependentUpon>
