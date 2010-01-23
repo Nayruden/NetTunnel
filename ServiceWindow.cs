@@ -53,6 +53,12 @@ namespace NetTunnel
 
         private void addButton_Click(object sender, EventArgs e)
         {
+            if (portsBox.Text == portsText)
+            {
+                MessageBox.Show("Please enter a value for the ports range");
+                return;
+            }
+
             string proto;
             if (UDPButton.Checked) proto = UDPButton.Text;         
             else if (bothButton.Checked) proto = bothButton.Text;
@@ -93,6 +99,7 @@ namespace NetTunnel
         {
             // Can we correctly parse this?
             PortRange port_range = new PortRange();
+            if (portsBox.TextLength == 0) return true; // It's okay, default will fill in
             if (!port_range.parseRange(portsBox.Text))
             {
                 MessageBox.Show("Please enter a port range like '67' or '67-75' without quotes");

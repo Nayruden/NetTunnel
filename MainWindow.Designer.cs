@@ -41,8 +41,6 @@
             this.newServiceButton = new System.Windows.Forms.Button();
             this.servicesLB = new System.Windows.Forms.CheckedListBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.shapeContainer1 = new Microsoft.VisualBasic.PowerPacks.ShapeContainer();
-            this.lineShape1 = new Microsoft.VisualBasic.PowerPacks.LineShape();
             this.chatTabControl = new System.Windows.Forms.TabControl();
             this.LobbyPage = new System.Windows.Forms.TabPage();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -54,8 +52,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.usersLB = new System.Windows.Forms.ListBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.shapeContainer2 = new Microsoft.VisualBasic.PowerPacks.ShapeContainer();
-            this.lineShape2 = new Microsoft.VisualBasic.PowerPacks.LineShape();
             this.label4 = new System.Windows.Forms.Label();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -88,7 +84,6 @@
             this.splitContainer1.Panel1.Controls.Add(this.newServiceButton);
             this.splitContainer1.Panel1.Controls.Add(this.servicesLB);
             this.splitContainer1.Panel1.Controls.Add(this.label1);
-            this.splitContainer1.Panel1.Controls.Add(this.shapeContainer1);
             // 
             // splitContainer1.Panel2
             // 
@@ -209,25 +204,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Services:";
             // 
-            // shapeContainer1
-            // 
-            this.shapeContainer1.Location = new System.Drawing.Point(0, 0);
-            this.shapeContainer1.Margin = new System.Windows.Forms.Padding(0);
-            this.shapeContainer1.Name = "shapeContainer1";
-            this.shapeContainer1.Shapes.AddRange(new Microsoft.VisualBasic.PowerPacks.Shape[] {
-            this.lineShape1});
-            this.shapeContainer1.Size = new System.Drawing.Size(140, 730);
-            this.shapeContainer1.TabIndex = 4;
-            this.shapeContainer1.TabStop = false;
-            // 
-            // lineShape1
-            // 
-            this.lineShape1.Name = "lineShape1";
-            this.lineShape1.X1 = 11;
-            this.lineShape1.X2 = 133;
-            this.lineShape1.Y1 = 198;
-            this.lineShape1.Y2 = 198;
-            // 
             // chatTabControl
             // 
             this.chatTabControl.Controls.Add(this.LobbyPage);
@@ -268,7 +244,6 @@
             this.splitContainer2.Panel2.Controls.Add(this.label6);
             this.splitContainer2.Panel2.Controls.Add(this.usersLB);
             this.splitContainer2.Panel2.Controls.Add(this.label5);
-            this.splitContainer2.Panel2.Controls.Add(this.shapeContainer2);
             this.splitContainer2.Size = new System.Drawing.Size(840, 670);
             this.splitContainer2.SplitterDistance = 695;
             this.splitContainer2.TabIndex = 0;
@@ -360,25 +335,6 @@
             this.label5.TabIndex = 0;
             this.label5.Text = "Users:";
             // 
-            // shapeContainer2
-            // 
-            this.shapeContainer2.Location = new System.Drawing.Point(0, 0);
-            this.shapeContainer2.Margin = new System.Windows.Forms.Padding(0);
-            this.shapeContainer2.Name = "shapeContainer2";
-            this.shapeContainer2.Shapes.AddRange(new Microsoft.VisualBasic.PowerPacks.Shape[] {
-            this.lineShape2});
-            this.shapeContainer2.Size = new System.Drawing.Size(141, 670);
-            this.shapeContainer2.TabIndex = 2;
-            this.shapeContainer2.TabStop = false;
-            // 
-            // lineShape2
-            // 
-            this.lineShape2.Name = "lineShape2";
-            this.lineShape2.X1 = 11;
-            this.lineShape2.X2 = 129;
-            this.lineShape2.Y1 = 254;
-            this.lineShape2.Y2 = 254;
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -421,8 +377,6 @@
         private System.Windows.Forms.Button editServiceButton;
         private System.Windows.Forms.Button deleteServiceButton;
         private System.Windows.Forms.Label label2;
-        private Microsoft.VisualBasic.PowerPacks.ShapeContainer shapeContainer1;
-        private Microsoft.VisualBasic.PowerPacks.LineShape lineShape1;
         private System.Windows.Forms.ListBox channelsLB;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox nickBox;
@@ -440,8 +394,6 @@
         private System.Windows.Forms.ListBox userServicesLB;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ListBox usersLB;
-        private Microsoft.VisualBasic.PowerPacks.ShapeContainer shapeContainer2;
-        private Microsoft.VisualBasic.PowerPacks.LineShape lineShape2;
         private System.Windows.Forms.Button leaveChannelButton;
     }
 }
