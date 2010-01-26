@@ -5,9 +5,6 @@ using System.Windows.Forms;
 
 namespace NetTunnel
 {
-    /// <summary>
-    /// NetTunnel
-    /// </summary>
     static class Program
     {
         /// <summary>

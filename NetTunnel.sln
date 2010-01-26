@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetTunnel", "NetTunnel.csproj", "{9F23C430-4FA5-4B66-B89F-2D3A9DCB7126}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetTunnel", "NetTunnel.csproj", "{5BBFA5C4-9B27-41CB-9831-27A66A4F7847}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +9,10 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9F23C430-4FA5-4B66-B89F-2D3A9DCB7126}.Debug|x86.ActiveCfg = Debug|x86
-		{9F23C430-4FA5-4B66-B89F-2D3A9DCB7126}.Debug|x86.Build.0 = Debug|x86
-		{9F23C430-4FA5-4B66-B89F-2D3A9DCB7126}.Release|x86.ActiveCfg = Release|x86
-		{9F23C430-4FA5-4B66-B89F-2D3A9DCB7126}.Release|x86.Build.0 = Release|x86
+		{5BBFA5C4-9B27-41CB-9831-27A66A4F7847}.Debug|x86.ActiveCfg = Debug|x86
+		{5BBFA5C4-9B27-41CB-9831-27A66A4F7847}.Debug|x86.Build.0 = Debug|x86
+		{5BBFA5C4-9B27-41CB-9831-27A66A4F7847}.Release|x86.ActiveCfg = Release|x86
+		{5BBFA5C4-9B27-41CB-9831-27A66A4F7847}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
