@@ -42,6 +42,11 @@
             this.chatTabControl = new System.Windows.Forms.TabControl();
             this.lobbyPage = new System.Windows.Forms.TabPage();
             this.chatTabContainer = new System.Windows.Forms.SplitContainer();
+            this.chatContainer = new System.Windows.Forms.SplitContainer();
+            this.chatHistoryBox = new System.Windows.Forms.TextBox();
+            this.chatBoxContainer = new System.Windows.Forms.SplitContainer();
+            this.chatBox = new System.Windows.Forms.TextBox();
+            this.sendButton = new System.Windows.Forms.Button();
             this.discoveryContainer = new System.Windows.Forms.SplitContainer();
             this.usersGroupBox = new System.Windows.Forms.GroupBox();
             this.usersListBox = new System.Windows.Forms.ListBox();
@@ -51,29 +56,24 @@
             this.serviceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.servicesGroupBox = new System.Windows.Forms.GroupBox();
             this.servicesListBox = new System.Windows.Forms.ListBox();
-            this.chatContainer = new System.Windows.Forms.SplitContainer();
-            this.chatBoxContainer = new System.Windows.Forms.SplitContainer();
-            this.sendButton = new System.Windows.Forms.Button();
-            this.chatBox = new System.Windows.Forms.TextBox();
-            this.chatHistoryBox = new System.Windows.Forms.TextBox();
             this.mainMenuStrip.SuspendLayout();
             this.chatTabControl.SuspendLayout();
             this.lobbyPage.SuspendLayout();
             this.chatTabContainer.Panel1.SuspendLayout();
             this.chatTabContainer.Panel2.SuspendLayout();
             this.chatTabContainer.SuspendLayout();
-            this.discoveryContainer.Panel1.SuspendLayout();
-            this.discoveryContainer.Panel2.SuspendLayout();
-            this.discoveryContainer.SuspendLayout();
-            this.usersGroupBox.SuspendLayout();
-            this.discoveryViewByToolStrip.SuspendLayout();
-            this.servicesGroupBox.SuspendLayout();
             this.chatContainer.Panel1.SuspendLayout();
             this.chatContainer.Panel2.SuspendLayout();
             this.chatContainer.SuspendLayout();
             this.chatBoxContainer.Panel1.SuspendLayout();
             this.chatBoxContainer.Panel2.SuspendLayout();
             this.chatBoxContainer.SuspendLayout();
+            this.discoveryContainer.Panel1.SuspendLayout();
+            this.discoveryContainer.Panel2.SuspendLayout();
+            this.discoveryContainer.SuspendLayout();
+            this.usersGroupBox.SuspendLayout();
+            this.discoveryViewByToolStrip.SuspendLayout();
+            this.servicesGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainMenuStrip
@@ -195,6 +195,76 @@
             this.chatTabContainer.SplitterDistance = 486;
             this.chatTabContainer.TabIndex = 0;
             // 
+            // chatContainer
+            // 
+            this.chatContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chatContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this.chatContainer.Location = new System.Drawing.Point(0, 0);
+            this.chatContainer.Name = "chatContainer";
+            this.chatContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // chatContainer.Panel1
+            // 
+            this.chatContainer.Panel1.Controls.Add(this.chatHistoryBox);
+            this.chatContainer.Panel1MinSize = 200;
+            // 
+            // chatContainer.Panel2
+            // 
+            this.chatContainer.Panel2.Controls.Add(this.chatBoxContainer);
+            this.chatContainer.Panel2MinSize = 20;
+            this.chatContainer.Size = new System.Drawing.Size(486, 506);
+            this.chatContainer.SplitterDistance = 482;
+            this.chatContainer.TabIndex = 0;
+            // 
+            // chatHistoryBox
+            // 
+            this.chatHistoryBox.BackColor = System.Drawing.SystemColors.Window;
+            this.chatHistoryBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chatHistoryBox.Location = new System.Drawing.Point(0, 0);
+            this.chatHistoryBox.Multiline = true;
+            this.chatHistoryBox.Name = "chatHistoryBox";
+            this.chatHistoryBox.ReadOnly = true;
+            this.chatHistoryBox.Size = new System.Drawing.Size(486, 482);
+            this.chatHistoryBox.TabIndex = 0;
+            // 
+            // chatBoxContainer
+            // 
+            this.chatBoxContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chatBoxContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this.chatBoxContainer.IsSplitterFixed = true;
+            this.chatBoxContainer.Location = new System.Drawing.Point(0, 0);
+            this.chatBoxContainer.Name = "chatBoxContainer";
+            // 
+            // chatBoxContainer.Panel1
+            // 
+            this.chatBoxContainer.Panel1.Controls.Add(this.chatBox);
+            // 
+            // chatBoxContainer.Panel2
+            // 
+            this.chatBoxContainer.Panel2.Controls.Add(this.sendButton);
+            this.chatBoxContainer.Size = new System.Drawing.Size(486, 20);
+            this.chatBoxContainer.SplitterDistance = 440;
+            this.chatBoxContainer.TabIndex = 0;
+            // 
+            // chatBox
+            // 
+            this.chatBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chatBox.Location = new System.Drawing.Point(0, 0);
+            this.chatBox.Multiline = true;
+            this.chatBox.Name = "chatBox";
+            this.chatBox.Size = new System.Drawing.Size(440, 20);
+            this.chatBox.TabIndex = 0;
+            // 
+            // sendButton
+            // 
+            this.sendButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sendButton.Location = new System.Drawing.Point(0, 0);
+            this.sendButton.Name = "sendButton";
+            this.sendButton.Size = new System.Drawing.Size(42, 20);
+            this.sendButton.TabIndex = 0;
+            this.sendButton.Text = "Send";
+            this.sendButton.UseVisualStyleBackColor = true;
+            // 
             // discoveryContainer
             // 
             this.discoveryContainer.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -306,76 +376,6 @@
             this.servicesListBox.Size = new System.Drawing.Size(74, 195);
             this.servicesListBox.TabIndex = 0;
             // 
-            // chatContainer
-            // 
-            this.chatContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chatContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.chatContainer.Location = new System.Drawing.Point(0, 0);
-            this.chatContainer.Name = "chatContainer";
-            this.chatContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // chatContainer.Panel1
-            // 
-            this.chatContainer.Panel1.Controls.Add(this.chatHistoryBox);
-            this.chatContainer.Panel1MinSize = 200;
-            // 
-            // chatContainer.Panel2
-            // 
-            this.chatContainer.Panel2.Controls.Add(this.chatBoxContainer);
-            this.chatContainer.Panel2MinSize = 20;
-            this.chatContainer.Size = new System.Drawing.Size(486, 506);
-            this.chatContainer.SplitterDistance = 482;
-            this.chatContainer.TabIndex = 0;
-            // 
-            // chatBoxContainer
-            // 
-            this.chatBoxContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chatBoxContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.chatBoxContainer.IsSplitterFixed = true;
-            this.chatBoxContainer.Location = new System.Drawing.Point(0, 0);
-            this.chatBoxContainer.Name = "chatBoxContainer";
-            // 
-            // chatBoxContainer.Panel1
-            // 
-            this.chatBoxContainer.Panel1.Controls.Add(this.chatBox);
-            // 
-            // chatBoxContainer.Panel2
-            // 
-            this.chatBoxContainer.Panel2.Controls.Add(this.sendButton);
-            this.chatBoxContainer.Size = new System.Drawing.Size(486, 20);
-            this.chatBoxContainer.SplitterDistance = 440;
-            this.chatBoxContainer.TabIndex = 0;
-            // 
-            // sendButton
-            // 
-            this.sendButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sendButton.Location = new System.Drawing.Point(0, 0);
-            this.sendButton.Name = "sendButton";
-            this.sendButton.Size = new System.Drawing.Size(42, 20);
-            this.sendButton.TabIndex = 0;
-            this.sendButton.Text = "Send";
-            this.sendButton.UseVisualStyleBackColor = true;
-            // 
-            // chatBox
-            // 
-            this.chatBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chatBox.Location = new System.Drawing.Point(0, 0);
-            this.chatBox.Multiline = true;
-            this.chatBox.Name = "chatBox";
-            this.chatBox.Size = new System.Drawing.Size(440, 20);
-            this.chatBox.TabIndex = 0;
-            // 
-            // chatHistoryBox
-            // 
-            this.chatHistoryBox.BackColor = System.Drawing.SystemColors.Window;
-            this.chatHistoryBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chatHistoryBox.Location = new System.Drawing.Point(0, 0);
-            this.chatHistoryBox.Multiline = true;
-            this.chatHistoryBox.Name = "chatHistoryBox";
-            this.chatHistoryBox.ReadOnly = true;
-            this.chatHistoryBox.Size = new System.Drawing.Size(486, 482);
-            this.chatHistoryBox.TabIndex = 0;
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -388,7 +388,6 @@
             this.MinimumSize = new System.Drawing.Size(400, 400);
             this.Name = "MainWindow";
             this.Text = "NetTunnel";
-            this.Load += new System.EventHandler(this.MainWindow_Load);
             this.mainMenuStrip.ResumeLayout(false);
             this.mainMenuStrip.PerformLayout();
             this.chatTabControl.ResumeLayout(false);
@@ -396,14 +395,6 @@
             this.chatTabContainer.Panel1.ResumeLayout(false);
             this.chatTabContainer.Panel2.ResumeLayout(false);
             this.chatTabContainer.ResumeLayout(false);
-            this.discoveryContainer.Panel1.ResumeLayout(false);
-            this.discoveryContainer.Panel1.PerformLayout();
-            this.discoveryContainer.Panel2.ResumeLayout(false);
-            this.discoveryContainer.ResumeLayout(false);
-            this.usersGroupBox.ResumeLayout(false);
-            this.discoveryViewByToolStrip.ResumeLayout(false);
-            this.discoveryViewByToolStrip.PerformLayout();
-            this.servicesGroupBox.ResumeLayout(false);
             this.chatContainer.Panel1.ResumeLayout(false);
             this.chatContainer.Panel1.PerformLayout();
             this.chatContainer.Panel2.ResumeLayout(false);
@@ -412,6 +403,14 @@
             this.chatBoxContainer.Panel1.PerformLayout();
             this.chatBoxContainer.Panel2.ResumeLayout(false);
             this.chatBoxContainer.ResumeLayout(false);
+            this.discoveryContainer.Panel1.ResumeLayout(false);
+            this.discoveryContainer.Panel1.PerformLayout();
+            this.discoveryContainer.Panel2.ResumeLayout(false);
+            this.discoveryContainer.ResumeLayout(false);
+            this.usersGroupBox.ResumeLayout(false);
+            this.discoveryViewByToolStrip.ResumeLayout(false);
+            this.discoveryViewByToolStrip.PerformLayout();
+            this.servicesGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
