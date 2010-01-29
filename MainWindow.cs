@@ -18,7 +18,9 @@ namespace NetTunnel
 
         private void servicesMenuToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            var services_window = new ServicesWindow();
+            var result = services_window.ShowDialog(this);
+            Console.WriteLine(result.ToString());
         }
     }
 }
