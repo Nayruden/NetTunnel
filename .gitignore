@@ -2,4 +2,6 @@ obj/
 bin/*/
 *.suo
 *.user
-
+*.pidb
+*.userprefs
+*.resources
