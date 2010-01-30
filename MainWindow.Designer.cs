@@ -225,8 +225,10 @@
             this.chatHistoryBox.Multiline = true;
             this.chatHistoryBox.Name = "chatHistoryBox";
             this.chatHistoryBox.ReadOnly = true;
+            this.chatHistoryBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.chatHistoryBox.Size = new System.Drawing.Size(486, 482);
             this.chatHistoryBox.TabIndex = 0;
+            this.chatHistoryBox.TextChanged += new System.EventHandler(this.chatHistoryBox_TextChanged);
             // 
             // chatBoxContainer
             // 
@@ -255,7 +257,7 @@
             this.chatBox.Name = "chatBox";
             this.chatBox.Size = new System.Drawing.Size(440, 20);
             this.chatBox.TabIndex = 0;
-            this.chatBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.chatBox_KeyDown);
+            this.chatBox.TextChanged += new System.EventHandler(this.chatBox_TextChanged);
             this.chatBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.chatBox_KeyPress);
             // 
             // sendButton
@@ -374,9 +376,11 @@
             this.servicesListBox.Items.AddRange(new object[] {
             "Apache",
             "Srcds",
-            "Ventrilo"});
+            "Ventrilo",
+            "Cities Online"});
             this.servicesListBox.Location = new System.Drawing.Point(3, 16);
             this.servicesListBox.Name = "servicesListBox";
+            this.servicesListBox.SelectionMode = System.Windows.Forms.SelectionMode.None;
             this.servicesListBox.Size = new System.Drawing.Size(74, 195);
             this.servicesListBox.TabIndex = 0;
             // 
@@ -388,6 +392,7 @@
             this.Controls.Add(this.chatTabControl);
             this.Controls.Add(this.mainMenuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.mainMenuStrip;
             this.MinimumSize = new System.Drawing.Size(400, 400);
             this.Name = "MainWindow";
             this.Text = "NetTunnel";
