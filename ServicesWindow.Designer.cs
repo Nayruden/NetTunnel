@@ -141,7 +141,7 @@
             // portsHeader
             // 
             this.portsHeader.Text = "Ports";
-            this.portsHeader.Width = 159;
+            this.portsHeader.Width = 160;
             // 
             // protocolHeader
             // 
@@ -293,6 +293,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ServicesWindow";
+            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

@@ -139,6 +139,7 @@
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(70, 20);
             this.settingsToolStripMenuItem.Text = "Settings...";
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -254,6 +255,8 @@
             this.chatBox.Name = "chatBox";
             this.chatBox.Size = new System.Drawing.Size(440, 20);
             this.chatBox.TabIndex = 0;
+            this.chatBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.chatBox_KeyDown);
+            this.chatBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.chatBox_KeyPress);
             // 
             // sendButton
             // 
@@ -264,6 +267,7 @@
             this.sendButton.TabIndex = 0;
             this.sendButton.Text = "Send";
             this.sendButton.UseVisualStyleBackColor = true;
+            this.sendButton.Click += new System.EventHandler(this.sendButton_Click);
             // 
             // discoveryContainer
             // 
@@ -384,7 +388,6 @@
             this.Controls.Add(this.chatTabControl);
             this.Controls.Add(this.mainMenuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MainMenuStrip = this.mainMenuStrip;
             this.MinimumSize = new System.Drawing.Size(400, 400);
             this.Name = "MainWindow";
             this.Text = "NetTunnel";

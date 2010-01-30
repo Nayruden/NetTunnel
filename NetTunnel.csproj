@@ -59,6 +59,12 @@
     <Compile Include="ServicesWindow.Designer.cs">
       <DependentUpon>ServicesWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="SettingsWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsWindow.Designer.cs">
+      <DependentUpon>SettingsWindow.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -73,6 +79,9 @@
     </Compile>
     <EmbeddedResource Include="ServicesWindow.resx">
       <DependentUpon>ServicesWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsWindow.resx">
+      <DependentUpon>SettingsWindow.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
