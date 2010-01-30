@@ -32,10 +32,7 @@
             this.mainMenuStrip = new System.Windows.Forms.MenuStrip();
             this.servicesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.servicesMenuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.ventriloToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.apacheToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.srcdsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripLine = new System.Windows.Forms.ToolStripSeparator();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,10 +47,6 @@
             this.discoveryContainer = new System.Windows.Forms.SplitContainer();
             this.usersGroupBox = new System.Windows.Forms.GroupBox();
             this.usersListBox = new System.Windows.Forms.ListBox();
-            this.discoveryViewByToolStrip = new System.Windows.Forms.ToolStrip();
-            this.discoveryViewByButton = new System.Windows.Forms.ToolStripSplitButton();
-            this.userToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.serviceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.servicesGroupBox = new System.Windows.Forms.GroupBox();
             this.servicesListBox = new System.Windows.Forms.ListBox();
             this.mainMenuStrip.SuspendLayout();
@@ -72,7 +65,6 @@
             this.discoveryContainer.Panel2.SuspendLayout();
             this.discoveryContainer.SuspendLayout();
             this.usersGroupBox.SuspendLayout();
-            this.discoveryViewByToolStrip.SuspendLayout();
             this.servicesGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -92,10 +84,7 @@
             // 
             this.servicesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.servicesMenuToolStripMenuItem,
-            this.toolStripMenuItem1,
-            this.ventriloToolStripMenuItem,
-            this.apacheToolStripMenuItem,
-            this.srcdsToolStripMenuItem});
+            this.toolStripLine});
             this.servicesToolStripMenuItem.Name = "servicesToolStripMenuItem";
             this.servicesToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.servicesToolStripMenuItem.Text = "Services";
@@ -107,32 +96,10 @@
             this.servicesMenuToolStripMenuItem.Text = "Services Menu...";
             this.servicesMenuToolStripMenuItem.Click += new System.EventHandler(this.servicesMenuToolStripMenuItem_Click);
             // 
-            // toolStripMenuItem1
+            // toolStripLine
             // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(156, 6);
-            // 
-            // ventriloToolStripMenuItem
-            // 
-            this.ventriloToolStripMenuItem.Checked = true;
-            this.ventriloToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ventriloToolStripMenuItem.Name = "ventriloToolStripMenuItem";
-            this.ventriloToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
-            this.ventriloToolStripMenuItem.Text = "Ventrilo";
-            // 
-            // apacheToolStripMenuItem
-            // 
-            this.apacheToolStripMenuItem.Name = "apacheToolStripMenuItem";
-            this.apacheToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
-            this.apacheToolStripMenuItem.Text = "Apache";
-            // 
-            // srcdsToolStripMenuItem
-            // 
-            this.srcdsToolStripMenuItem.Checked = true;
-            this.srcdsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.srcdsToolStripMenuItem.Name = "srcdsToolStripMenuItem";
-            this.srcdsToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
-            this.srcdsToolStripMenuItem.Text = "Srcds";
+            this.toolStripLine.Name = "toolStripLine";
+            this.toolStripLine.Size = new System.Drawing.Size(156, 6);
             // 
             // settingsToolStripMenuItem
             // 
@@ -154,6 +121,7 @@
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // chatTabControl
             // 
@@ -229,6 +197,7 @@
             this.chatHistoryBox.Size = new System.Drawing.Size(486, 482);
             this.chatHistoryBox.TabIndex = 0;
             this.chatHistoryBox.TextChanged += new System.EventHandler(this.chatHistoryBox_TextChanged);
+            this.chatHistoryBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.chatHistoryBox_MouseUp);
             // 
             // chatBoxContainer
             // 
@@ -282,7 +251,6 @@
             // discoveryContainer.Panel1
             // 
             this.discoveryContainer.Panel1.Controls.Add(this.usersGroupBox);
-            this.discoveryContainer.Panel1.Controls.Add(this.discoveryViewByToolStrip);
             this.discoveryContainer.Panel1MinSize = 125;
             // 
             // discoveryContainer.Panel2
@@ -298,9 +266,9 @@
             this.usersGroupBox.BackColor = System.Drawing.Color.Transparent;
             this.usersGroupBox.Controls.Add(this.usersListBox);
             this.usersGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.usersGroupBox.Location = new System.Drawing.Point(0, 25);
+            this.usersGroupBox.Location = new System.Drawing.Point(0, 0);
             this.usersGroupBox.Name = "usersGroupBox";
-            this.usersGroupBox.Size = new System.Drawing.Size(80, 263);
+            this.usersGroupBox.Size = new System.Drawing.Size(80, 288);
             this.usersGroupBox.TabIndex = 0;
             this.usersGroupBox.TabStop = false;
             this.usersGroupBox.Text = "Users";
@@ -317,45 +285,8 @@
             "Trudy"});
             this.usersListBox.Location = new System.Drawing.Point(3, 16);
             this.usersListBox.Name = "usersListBox";
-            this.usersListBox.Size = new System.Drawing.Size(74, 244);
+            this.usersListBox.Size = new System.Drawing.Size(74, 269);
             this.usersListBox.TabIndex = 0;
-            // 
-            // discoveryViewByToolStrip
-            // 
-            this.discoveryViewByToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.discoveryViewByToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.discoveryViewByButton});
-            this.discoveryViewByToolStrip.Location = new System.Drawing.Point(0, 0);
-            this.discoveryViewByToolStrip.Name = "discoveryViewByToolStrip";
-            this.discoveryViewByToolStrip.Size = new System.Drawing.Size(80, 25);
-            this.discoveryViewByToolStrip.TabIndex = 1;
-            this.discoveryViewByToolStrip.Text = "viewByToolStrip";
-            // 
-            // discoveryViewByButton
-            // 
-            this.discoveryViewByButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.discoveryViewByButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.userToolStripMenuItem,
-            this.serviceToolStripMenuItem});
-            this.discoveryViewByButton.Image = ((System.Drawing.Image)(resources.GetObject("discoveryViewByButton.Image")));
-            this.discoveryViewByButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.discoveryViewByButton.Name = "discoveryViewByButton";
-            this.discoveryViewByButton.Size = new System.Drawing.Size(64, 22);
-            this.discoveryViewByButton.Text = "View by";
-            // 
-            // userToolStripMenuItem
-            // 
-            this.userToolStripMenuItem.Checked = true;
-            this.userToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.userToolStripMenuItem.Name = "userToolStripMenuItem";
-            this.userToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
-            this.userToolStripMenuItem.Text = "User";
-            // 
-            // serviceToolStripMenuItem
-            // 
-            this.serviceToolStripMenuItem.Name = "serviceToolStripMenuItem";
-            this.serviceToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
-            this.serviceToolStripMenuItem.Text = "Service";
             // 
             // servicesGroupBox
             // 
@@ -412,12 +343,9 @@
             this.chatBoxContainer.Panel2.ResumeLayout(false);
             this.chatBoxContainer.ResumeLayout(false);
             this.discoveryContainer.Panel1.ResumeLayout(false);
-            this.discoveryContainer.Panel1.PerformLayout();
             this.discoveryContainer.Panel2.ResumeLayout(false);
             this.discoveryContainer.ResumeLayout(false);
             this.usersGroupBox.ResumeLayout(false);
-            this.discoveryViewByToolStrip.ResumeLayout(false);
-            this.discoveryViewByToolStrip.PerformLayout();
             this.servicesGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -429,10 +357,7 @@
         private System.Windows.Forms.MenuStrip mainMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem servicesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem servicesMenuToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem ventriloToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem apacheToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem srcdsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripLine;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
@@ -443,10 +368,6 @@
         private System.Windows.Forms.GroupBox usersGroupBox;
         private System.Windows.Forms.ListBox usersListBox;
         private System.Windows.Forms.GroupBox servicesGroupBox;
-        private System.Windows.Forms.ToolStrip discoveryViewByToolStrip;
-        private System.Windows.Forms.ToolStripSplitButton discoveryViewByButton;
-        private System.Windows.Forms.ToolStripMenuItem userToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem serviceToolStripMenuItem;
         private System.Windows.Forms.ListBox servicesListBox;
         private System.Windows.Forms.SplitContainer chatContainer;
         private System.Windows.Forms.SplitContainer chatBoxContainer;

@@ -41,16 +41,16 @@
             this.label4 = new System.Windows.Forms.Label();
             this.portsBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.removePortsButton = new System.Windows.Forms.Button();
+            this.addPortsButton = new System.Windows.Forms.Button();
             this.portsAndProtoListView = new System.Windows.Forms.ListView();
             this.portsHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.protocolHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.serviceNameBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.button5 = new System.Windows.Forms.Button();
+            this.deleteServiceButton = new System.Windows.Forms.Button();
+            this.servicesComboBox = new System.Windows.Forms.ComboBox();
             this.servicesGroupBox.SuspendLayout();
             this.editServiceGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -71,15 +71,12 @@
             // 
             this.servicesListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.servicesListBox.FormattingEnabled = true;
-            this.servicesListBox.Items.AddRange(new object[] {
-            "Srcds",
-            "Apache",
-            "Ventrilo",
-            "Cities Online"});
             this.servicesListBox.Location = new System.Drawing.Point(3, 16);
             this.servicesListBox.Name = "servicesListBox";
             this.servicesListBox.Size = new System.Drawing.Size(107, 265);
             this.servicesListBox.TabIndex = 0;
+            this.servicesListBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.servicesListBox_ItemCheck);
+            this.servicesListBox.SelectedIndexChanged += new System.EventHandler(this.servicesListBox_SelectedIndexChanged);
             // 
             // editServiceGroupBox
             // 
@@ -92,8 +89,8 @@
             this.editServiceGroupBox.Controls.Add(this.label4);
             this.editServiceGroupBox.Controls.Add(this.portsBox);
             this.editServiceGroupBox.Controls.Add(this.label3);
-            this.editServiceGroupBox.Controls.Add(this.button2);
-            this.editServiceGroupBox.Controls.Add(this.button1);
+            this.editServiceGroupBox.Controls.Add(this.removePortsButton);
+            this.editServiceGroupBox.Controls.Add(this.addPortsButton);
             this.editServiceGroupBox.Controls.Add(this.portsAndProtoListView);
             this.editServiceGroupBox.Controls.Add(this.serviceNameBox);
             this.editServiceGroupBox.Controls.Add(this.label2);
@@ -113,6 +110,7 @@
             this.modifyServiceButton.TabIndex = 13;
             this.modifyServiceButton.Text = "Modify";
             this.modifyServiceButton.UseVisualStyleBackColor = true;
+            this.modifyServiceButton.Click += new System.EventHandler(this.modifyServiceButton_Click);
             // 
             // addServiceButton
             // 
@@ -122,6 +120,7 @@
             this.addServiceButton.TabIndex = 12;
             this.addServiceButton.Text = "Add As New";
             this.addServiceButton.UseVisualStyleBackColor = true;
+            this.addServiceButton.Click += new System.EventHandler(this.addServiceButton_Click);
             // 
             // label5
             // 
@@ -139,13 +138,13 @@
             this.bothRadioButton.Name = "bothRadioButton";
             this.bothRadioButton.Size = new System.Drawing.Size(47, 17);
             this.bothRadioButton.TabIndex = 10;
-            this.bothRadioButton.TabStop = true;
             this.bothRadioButton.Text = "Both";
             this.bothRadioButton.UseVisualStyleBackColor = true;
             // 
             // TCPRadioButton
             // 
             this.TCPRadioButton.AutoSize = true;
+            this.TCPRadioButton.Checked = true;
             this.TCPRadioButton.Location = new System.Drawing.Point(118, 238);
             this.TCPRadioButton.Name = "TCPRadioButton";
             this.TCPRadioButton.Size = new System.Drawing.Size(46, 17);
@@ -161,7 +160,6 @@
             this.UDPRadioButton.Name = "UDPRadioButton";
             this.UDPRadioButton.Size = new System.Drawing.Size(48, 17);
             this.UDPRadioButton.TabIndex = 8;
-            this.UDPRadioButton.TabStop = true;
             this.UDPRadioButton.Text = "UDP";
             this.UDPRadioButton.UseVisualStyleBackColor = true;
             // 
@@ -176,10 +174,12 @@
             // 
             // portsBox
             // 
+            this.portsBox.BackColor = System.Drawing.SystemColors.Window;
             this.portsBox.Location = new System.Drawing.Point(55, 208);
             this.portsBox.Name = "portsBox";
             this.portsBox.Size = new System.Drawing.Size(178, 20);
             this.portsBox.TabIndex = 6;
+            this.portsBox.Validating += new System.ComponentModel.CancelEventHandler(this.portsBox_Validating);
             // 
             // label3
             // 
@@ -190,25 +190,27 @@
             this.label3.TabIndex = 5;
             this.label3.Text = "Port(s):";
             // 
-            // button2
+            // removePortsButton
             // 
-            this.button2.Font = new System.Drawing.Font("Lucida Sans Unicode", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(26, 178);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(20, 23);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "-";
-            this.button2.UseVisualStyleBackColor = true;
+            this.removePortsButton.Font = new System.Drawing.Font("Lucida Sans Unicode", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.removePortsButton.Location = new System.Drawing.Point(26, 178);
+            this.removePortsButton.Name = "removePortsButton";
+            this.removePortsButton.Size = new System.Drawing.Size(20, 23);
+            this.removePortsButton.TabIndex = 4;
+            this.removePortsButton.Text = "-";
+            this.removePortsButton.UseVisualStyleBackColor = true;
+            this.removePortsButton.Click += new System.EventHandler(this.removePortsButton_Click);
             // 
-            // button1
+            // addPortsButton
             // 
-            this.button1.Font = new System.Drawing.Font("Lucida Sans Unicode", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(6, 178);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(20, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "+";
-            this.button1.UseVisualStyleBackColor = true;
+            this.addPortsButton.Font = new System.Drawing.Font("Lucida Sans Unicode", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.addPortsButton.Location = new System.Drawing.Point(6, 178);
+            this.addPortsButton.Name = "addPortsButton";
+            this.addPortsButton.Size = new System.Drawing.Size(20, 23);
+            this.addPortsButton.TabIndex = 3;
+            this.addPortsButton.Text = "+";
+            this.addPortsButton.UseVisualStyleBackColor = true;
+            this.addPortsButton.Click += new System.EventHandler(this.addPortsButton_Click);
             // 
             // portsAndProtoListView
             // 
@@ -258,30 +260,33 @@
             this.label1.TabIndex = 4;
             this.label1.Text = "Load Template:";
             // 
-            // comboBox1
+            // deleteServiceButton
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(219, 6);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(155, 21);
-            this.comboBox1.TabIndex = 5;
+            this.deleteServiceButton.Location = new System.Drawing.Point(30, 303);
+            this.deleteServiceButton.Name = "deleteServiceButton";
+            this.deleteServiceButton.Size = new System.Drawing.Size(80, 23);
+            this.deleteServiceButton.TabIndex = 6;
+            this.deleteServiceButton.Text = "Delete";
+            this.deleteServiceButton.UseVisualStyleBackColor = true;
+            this.deleteServiceButton.Click += new System.EventHandler(this.deleteServiceButton_Click);
             // 
-            // button5
+            // servicesComboBox
             // 
-            this.button5.Location = new System.Drawing.Point(30, 303);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(80, 23);
-            this.button5.TabIndex = 6;
-            this.button5.Text = "Delete";
-            this.button5.UseVisualStyleBackColor = true;
+            this.servicesComboBox.FormattingEnabled = true;
+            this.servicesComboBox.Location = new System.Drawing.Point(219, 6);
+            this.servicesComboBox.Name = "servicesComboBox";
+            this.servicesComboBox.Size = new System.Drawing.Size(155, 21);
+            this.servicesComboBox.TabIndex = 5;
+            this.servicesComboBox.Text = "Select a template...";
+            this.servicesComboBox.SelectedIndexChanged += new System.EventHandler(this.servicesComboBox_SelectedIndexChanged);
             // 
             // ServicesWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(381, 340);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.deleteServiceButton);
+            this.Controls.Add(this.servicesComboBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.editServiceGroupBox);
             this.Controls.Add(this.servicesGroupBox);
@@ -309,7 +314,7 @@
         private System.Windows.Forms.GroupBox editServiceGroupBox;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox servicesComboBox;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.RadioButton bothRadioButton;
         private System.Windows.Forms.RadioButton TCPRadioButton;
@@ -317,15 +322,15 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox portsBox;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button removePortsButton;
+        private System.Windows.Forms.Button addPortsButton;
         private System.Windows.Forms.ListView portsAndProtoListView;
         private System.Windows.Forms.ColumnHeader portsHeader;
         private System.Windows.Forms.ColumnHeader protocolHeader;
         private System.Windows.Forms.TextBox serviceNameBox;
         private System.Windows.Forms.Button modifyServiceButton;
         private System.Windows.Forms.Button addServiceButton;
-        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button deleteServiceButton;
         private System.Windows.Forms.CheckedListBox servicesListBox;
     }
 }

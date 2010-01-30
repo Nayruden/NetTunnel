@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.Linq;
+using System.Collections.Generic;
 
 [Flags]
 public enum Protocols
@@ -53,6 +54,9 @@ public struct PortRange
         else
             end = start; // Not a range
 
+        if (end < start)
+            return false;
+
         return true;
     }
 
@@ -62,20 +66,25 @@ public struct PortRange
     }
 }
 
-public struct Service
+public class Service : IComparable< Service >
 {
     public string service_name;
-    public PortRange[] port_ranges;
+    public bool enabled = true;
+    public PortRange[] port_ranges = null;
 
     public Service(string service_name)
     {
         this.service_name = service_name;
-        port_ranges = null;
     }
 
     public override string ToString()
     {
         return service_name;
+    }
+
+    public int CompareTo(Service service)
+    {
+        return service_name.CompareTo(service.service_name);
     }
 }
 
@@ -121,3 +130,16 @@ public class KnownServices
     }
 }
 
+/// <summary>
+/// Services we are currently sharing with the world.
+/// </summary>
+public class SharedServices
+{
+    public static readonly List<Service> services = new List<Service>();
+
+    static SharedServices()
+    {
+        // TODO, persist and stuff
+        services.AddRange( new[] { KnownServices.get( "Apache" ), KnownServices.get( "Ventrilo" ) } );
+    }
+}
