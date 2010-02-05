@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetProtoServer", "NetProto\NetProtoServer.csproj", "{58FD6D38-F568-4D43-909E-188AE6684398}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server Prototype", "NetProto\Server Prototype.csproj", "{58FD6D38-F568-4D43-909E-188AE6684398}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetProtoClient", "NetProtoClient\NetProtoClient.csproj", "{1CEB10DA-29D5-4287-BB02-3B64A8364278}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client Prototype", "NetProtoClient\Client Prototype.csproj", "{1CEB10DA-29D5-4287-BB02-3B64A8364278}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUI prototype", "GUI Prototype\GUI prototype.csproj", "{5BBFA5C4-9B27-41CB-9831-27A66A4F7847}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUI Prototype", "GUI Prototype\GUI Prototype.csproj", "{5BBFA5C4-9B27-41CB-9831-27A66A4F7847}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
