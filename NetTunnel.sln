@@ -1,52 +1,30 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server Prototype", "NetProto\Server Prototype.csproj", "{58FD6D38-F568-4D43-909E-188AE6684398}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{1CEB10DA-29D5-4287-BB02-3B64A8364278}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client Prototype", "NetProtoClient\Client Prototype.csproj", "{1CEB10DA-29D5-4287-BB02-3B64A8364278}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUI", "GUI\GUI.csproj", "{5BBFA5C4-9B27-41CB-9831-27A66A4F7847}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUI Prototype", "GUI Prototype\GUI Prototype.csproj", "{5BBFA5C4-9B27-41CB-9831-27A66A4F7847}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{58FD6D38-F568-4D43-909E-188AE6684398}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Mixed Platforms = Debug|Mixed Platforms
-		Debug|Win32 = Debug|Win32
 		Debug|x86 = Debug|x86
-		Release|Mixed Platforms = Release|Mixed Platforms
-		Release|Win32 = Release|Win32
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{58FD6D38-F568-4D43-909E-188AE6684398}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{58FD6D38-F568-4D43-909E-188AE6684398}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{58FD6D38-F568-4D43-909E-188AE6684398}.Debug|Win32.ActiveCfg = Debug|x86
-		{58FD6D38-F568-4D43-909E-188AE6684398}.Debug|x86.ActiveCfg = Debug|x86
-		{58FD6D38-F568-4D43-909E-188AE6684398}.Debug|x86.Build.0 = Debug|x86
-		{58FD6D38-F568-4D43-909E-188AE6684398}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{58FD6D38-F568-4D43-909E-188AE6684398}.Release|Mixed Platforms.Build.0 = Release|x86
-		{58FD6D38-F568-4D43-909E-188AE6684398}.Release|Win32.ActiveCfg = Release|x86
-		{58FD6D38-F568-4D43-909E-188AE6684398}.Release|x86.ActiveCfg = Release|x86
-		{58FD6D38-F568-4D43-909E-188AE6684398}.Release|x86.Build.0 = Release|x86
-		{1CEB10DA-29D5-4287-BB02-3B64A8364278}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{1CEB10DA-29D5-4287-BB02-3B64A8364278}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{1CEB10DA-29D5-4287-BB02-3B64A8364278}.Debug|Win32.ActiveCfg = Debug|x86
 		{1CEB10DA-29D5-4287-BB02-3B64A8364278}.Debug|x86.ActiveCfg = Debug|x86
 		{1CEB10DA-29D5-4287-BB02-3B64A8364278}.Debug|x86.Build.0 = Debug|x86
-		{1CEB10DA-29D5-4287-BB02-3B64A8364278}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{1CEB10DA-29D5-4287-BB02-3B64A8364278}.Release|Mixed Platforms.Build.0 = Release|x86
-		{1CEB10DA-29D5-4287-BB02-3B64A8364278}.Release|Win32.ActiveCfg = Release|x86
 		{1CEB10DA-29D5-4287-BB02-3B64A8364278}.Release|x86.ActiveCfg = Release|x86
 		{1CEB10DA-29D5-4287-BB02-3B64A8364278}.Release|x86.Build.0 = Release|x86
-		{5BBFA5C4-9B27-41CB-9831-27A66A4F7847}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{5BBFA5C4-9B27-41CB-9831-27A66A4F7847}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{5BBFA5C4-9B27-41CB-9831-27A66A4F7847}.Debug|Win32.ActiveCfg = Debug|x86
 		{5BBFA5C4-9B27-41CB-9831-27A66A4F7847}.Debug|x86.ActiveCfg = Debug|x86
 		{5BBFA5C4-9B27-41CB-9831-27A66A4F7847}.Debug|x86.Build.0 = Debug|x86
-		{5BBFA5C4-9B27-41CB-9831-27A66A4F7847}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{5BBFA5C4-9B27-41CB-9831-27A66A4F7847}.Release|Mixed Platforms.Build.0 = Release|x86
-		{5BBFA5C4-9B27-41CB-9831-27A66A4F7847}.Release|Win32.ActiveCfg = Release|x86
 		{5BBFA5C4-9B27-41CB-9831-27A66A4F7847}.Release|x86.ActiveCfg = Release|x86
 		{5BBFA5C4-9B27-41CB-9831-27A66A4F7847}.Release|x86.Build.0 = Release|x86
+		{58FD6D38-F568-4D43-909E-188AE6684398}.Debug|x86.ActiveCfg = Debug|x86
+		{58FD6D38-F568-4D43-909E-188AE6684398}.Debug|x86.Build.0 = Debug|x86
+		{58FD6D38-F568-4D43-909E-188AE6684398}.Release|x86.ActiveCfg = Release|x86
+		{58FD6D38-F568-4D43-909E-188AE6684398}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Net.Sockets;
-using System.Net;
-using System.IO;
 
 namespace NetTunnel
 {
@@ -30,12 +26,6 @@ namespace NetTunnel
 
         static void Main(string[] args)
         {
-            // Server setup (remove later on)
-            var server_thread = new Thread(Server.NotMain);
-            server_thread.Start();
-            Thread.Sleep(500);
-            // End server setup
-
             // Create thread to read from input
             var input_thread = new Thread(readInput);
             input_thread.Start();
@@ -89,32 +79,8 @@ namespace NetTunnel
                         readyForInput.Set();
                     }
                 }
-
-                server_thread.Abort();
             }
         }
 
-    }
-
-    class Server
-    {
-        public static void NotMain()
-        {
-            Console.WriteLine("Listening on port {0}...", Protocol.PORT);
-
-            TcpListener listener = new TcpListener(IPAddress.Any, Protocol.PORT);
-            listener.Start();
-
-            using (TcpClient c = listener.AcceptTcpClient())
-            using (NetworkStream n = c.GetStream())
-            {
-                while (true)
-                {
-                    byte[] buffer = new byte[64];
-                    int size = n.Read(buffer, 0, buffer.Length);
-                    n.Write(buffer, 0, size);
-                }
-            }
-        }
     }
 }
