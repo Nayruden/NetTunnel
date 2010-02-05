@@ -89,7 +89,7 @@ namespace NetTunnel
             var trimmed_text = chatBox.Text.Trim();
             if (trimmed_text.Length == 0) return; // Not interested in empty text
 
-            var s = "[{0}] {1}: {2}{3}".F(DateTime.Now.ToShortTimeString(), Settings.Default.Nick, chatBox.Text, Environment.NewLine);
+            var s = "[{0}] {1}: {2}{3}".F(DateTime.Now.ToShortTimeString(), Settings.Default.Nick, trimmed_text, Environment.NewLine);
             chatHistoryBox.AppendText(s);
             chatBox.ResetText();
             chatBox.Focus(); // Make sure focus remains

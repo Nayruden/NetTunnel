@@ -104,7 +104,7 @@
             // modifyServiceButton
             // 
             this.modifyServiceButton.Enabled = false;
-            this.modifyServiceButton.Location = new System.Drawing.Point(112, 270);
+            this.modifyServiceButton.Location = new System.Drawing.Point(125, 270);
             this.modifyServiceButton.Name = "modifyServiceButton";
             this.modifyServiceButton.Size = new System.Drawing.Size(80, 23);
             this.modifyServiceButton.TabIndex = 13;
@@ -114,7 +114,7 @@
             // 
             // addServiceButton
             // 
-            this.addServiceButton.Location = new System.Drawing.Point(26, 270);
+            this.addServiceButton.Location = new System.Drawing.Point(39, 270);
             this.addServiceButton.Name = "addServiceButton";
             this.addServiceButton.Size = new System.Drawing.Size(80, 23);
             this.addServiceButton.TabIndex = 12;
@@ -125,16 +125,16 @@
             // label5
             // 
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(62, 179);
+            this.label5.Location = new System.Drawing.Point(86, 181);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(164, 26);
+            this.label5.Size = new System.Drawing.Size(155, 26);
             this.label5.TabIndex = 11;
             this.label5.Text = "Specify a port or a range, examples: \'5800-5900\' or \'21\'";
             // 
             // bothRadioButton
             // 
             this.bothRadioButton.AutoSize = true;
-            this.bothRadioButton.Location = new System.Drawing.Point(170, 238);
+            this.bothRadioButton.Location = new System.Drawing.Point(183, 240);
             this.bothRadioButton.Name = "bothRadioButton";
             this.bothRadioButton.Size = new System.Drawing.Size(47, 17);
             this.bothRadioButton.TabIndex = 10;
@@ -145,7 +145,7 @@
             // 
             this.TCPRadioButton.AutoSize = true;
             this.TCPRadioButton.Checked = true;
-            this.TCPRadioButton.Location = new System.Drawing.Point(118, 238);
+            this.TCPRadioButton.Location = new System.Drawing.Point(123, 240);
             this.TCPRadioButton.Name = "TCPRadioButton";
             this.TCPRadioButton.Size = new System.Drawing.Size(46, 17);
             this.TCPRadioButton.TabIndex = 9;
@@ -156,7 +156,7 @@
             // UDPRadioButton
             // 
             this.UDPRadioButton.AutoSize = true;
-            this.UDPRadioButton.Location = new System.Drawing.Point(64, 238);
+            this.UDPRadioButton.Location = new System.Drawing.Point(61, 240);
             this.UDPRadioButton.Name = "UDPRadioButton";
             this.UDPRadioButton.Size = new System.Drawing.Size(48, 17);
             this.UDPRadioButton.TabIndex = 8;
@@ -166,7 +166,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(9, 240);
+            this.label4.Location = new System.Drawing.Point(6, 242);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(49, 13);
             this.label4.TabIndex = 7;
@@ -175,16 +175,16 @@
             // portsBox
             // 
             this.portsBox.BackColor = System.Drawing.SystemColors.Window;
-            this.portsBox.Location = new System.Drawing.Point(55, 208);
+            this.portsBox.Location = new System.Drawing.Point(61, 210);
             this.portsBox.Name = "portsBox";
-            this.portsBox.Size = new System.Drawing.Size(178, 20);
+            this.portsBox.Size = new System.Drawing.Size(169, 20);
             this.portsBox.TabIndex = 6;
             this.portsBox.Validating += new System.ComponentModel.CancelEventHandler(this.portsBox_Validating);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(9, 211);
+            this.label3.Location = new System.Drawing.Point(6, 213);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(40, 13);
             this.label3.TabIndex = 5;
