@@ -9,9 +9,6 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using NetTunnel.Properties;
 
-
-
-
 namespace NetTunnel
 {
     public partial class MainWindow : Form

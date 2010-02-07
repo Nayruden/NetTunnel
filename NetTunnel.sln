@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUI", "GUI\GUI.csproj", "{5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{58FD6D38-F568-4D43-909E-188AE6684398}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{373A2F34-E617-4E50-A266-1389A410404E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -25,6 +27,10 @@ Global
 		{58FD6D38-F568-4D43-909E-188AE6684398}.Debug|x86.Build.0 = Debug|x86
 		{58FD6D38-F568-4D43-909E-188AE6684398}.Release|x86.ActiveCfg = Release|x86
 		{58FD6D38-F568-4D43-909E-188AE6684398}.Release|x86.Build.0 = Release|x86
+		{373A2F34-E617-4E50-A266-1389A410404E}.Debug|x86.ActiveCfg = Debug|x86
+		{373A2F34-E617-4E50-A266-1389A410404E}.Debug|x86.Build.0 = Debug|x86
+		{373A2F34-E617-4E50-A266-1389A410404E}.Release|x86.ActiveCfg = Release|x86
+		{373A2F34-E617-4E50-A266-1389A410404E}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
