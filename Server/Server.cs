@@ -165,7 +165,7 @@ namespace NetTunnel
 
                             case MessageType.ChatMessage:
                                 var chat_message = (ChatMessage)m;
-                                Console.WriteLine("Got chat message [{0}] {1}: {2}", chat_message.time.DateTime.ToShortTimeString(), client_details.nick, chat_message.message);
+                                Console.WriteLine("Got chat message [{0}] {1}: {2}", chat_message.time.ToShortTimeString(), client_details.nick, chat_message.message);
                                 broadcast(chat_message);
                                 break;
 

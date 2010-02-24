@@ -134,7 +134,7 @@ namespace NetTunnel
 
                             case MessageType.ChatMessage:
                                 var chat_message = (ChatMessage)m;
-                                Console.WriteLine("[{0}] {1}: {2}", chat_message.time.DateTime.ToShortTimeString(), UserDetails.getByUserid(chat_message.userid).nick, chat_message.message);
+                                Console.WriteLine("[{0}] {1}: {2}", chat_message.time.ToShortTimeString(), UserDetails.getByUserid(chat_message.userid).nick, chat_message.message);
                                 break;
 
                             case MessageType.PingRequestMessage:

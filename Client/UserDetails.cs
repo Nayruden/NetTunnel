@@ -15,7 +15,12 @@ namespace NetTunnel
         public ulong userid = 0;
         public List<Service> services = new List<Service>();
 
-        public UserMessage toUserMessage( MessageState state = MessageState.Modified )
+        public UserMessage toUserMessage()
+        {
+            return toUserMessage(MessageState.Modified);
+        }
+
+        public UserMessage toUserMessage( MessageState state )
         {
             var user_message = new UserMessage(nick, userid);
             user_message.state = state;

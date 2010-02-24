@@ -74,7 +74,7 @@ namespace NetTunnel
         public string message;
 
         [DataMember(Order = 3)]
-        public DateTimeOffset time;
+        public DateTime time;
 
         [DataMember(Order = 4)]
         public ulong userid;
@@ -83,7 +83,7 @@ namespace NetTunnel
         {
             this.message = message;
             this.userid = userid;
-            this.time = DateTimeOffset.Now;
+            this.time = DateTime.Now;
             this.type = MessageType.ChatMessage;
         }
 
