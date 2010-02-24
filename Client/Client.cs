@@ -21,43 +21,40 @@ namespace NetTunnel
         private static volatile byte[] buffer = new byte[Protocol.MAX_MESSAGE_SIZE];
         private static volatile int buffer_length;
         private static volatile NetworkStream stream;
-        private static volatile bool exit = false;
+        public static volatile bool exit = false;
 
         static void readInput()
         {
-            while (!exit)
-            {                
-                inputLine = Console.ReadLine().Trim();
-                inputRead.Set();
-                readyForInput.WaitOne();
+            try
+            {
+                while (!exit)
+                {
+                    inputLine = Console.ReadLine().Trim();
+                    inputRead.Set();
+                    readyForInput.WaitOne();
+                }
+            }
+            catch (ThreadInterruptedException exception)
+            {
+                // Don't need to do anything
             }
         }
 
         static void readStream()
         {
-            using (var client = new TcpClient("localhost", Protocol.PORT))
+            using (var client = new TcpClient("server.ulyssesmod.net", Protocol.PORT))
+            //using (var client = new TcpClient("192.168.0.110", Protocol.PORT))
             using (stream = client.GetStream())            
             {
                 try
-                {
+                {               
                     while (!exit)
                     {
-                        Array.Clear(buffer, 0, buffer.Length);
-                        buffer_length = stream.Read(buffer, 0, buffer.Length);
-                        if (buffer_length > 0) // Data available
-                        {
-                            var ds = new DataContractSerializer(typeof(Message));
-                            Message m;
-                            using (var memory_stream = new MemoryStream(buffer, 0, buffer_length))
-                                m = (Message)ds.ReadObject(memory_stream);
+                        byte[] size = new byte[sizeof(int)];
+                        stream.Read(size, 0, size.Length);
 
-                            m.executeLogic();
-                        }
-                        else // Disconnect
-                        {
-                            Console.WriteLine("Server left");
-                            exit = true;
-                        }
+                        buffer_length = stream.Read(buffer, 0, Math.Min(buffer.Length, BitConverter.ToInt32(size, 0)));
+
                         streamRead.Set();
                         readyForStream.WaitOne();
                     }
@@ -81,12 +78,86 @@ namespace NetTunnel
             var stream_thread = new Thread(readStream);
             stream_thread.Start();
 
+            var ping_thread = new Thread(Tunnel.run);
+            ping_thread.Start();
+
             while (!exit)
             {
                 if (streamRead.WaitOne(100)) // Wait 100 ms for stream to be read
                 {
-                    string str = encoding.GetString(buffer, 0, buffer_length);
-                    Console.WriteLine(str);
+                    if (buffer_length > 0) // Data available
+                    {
+                        var m = Utilities.readMessage(buffer, buffer_length);
+
+                        switch (m.type)
+                        {
+                            case MessageType.RegistrationMessage:
+                                var registration_message = (RegistrationMessage)m;
+
+                                // Send the initial information
+                                UserDetails.local_user.nick = "Unnamed";
+                                UserDetails.local_user.userid = registration_message.userid;
+                                UserDetails.local_user.services.Add(new Service("vent"));
+                                var message = UserDetails.local_user.toUserMessage(MessageState.Created);
+                                int length;
+                                var serialized = Utilities.writeMessage(message, out length);
+                                stream.Write(BitConverter.GetBytes(length), 0, sizeof(int));
+                                stream.Write(serialized, 0, length);
+                                break;
+
+                            case MessageType.UserMessage:
+                                var user_message = (UserMessage)m;
+                                UserDetails user;
+
+                                if (user_message.userid != UserDetails.local_user.userid && user_message.state == MessageState.Created)
+                                {
+                                    user = new UserDetails();
+                                    user.nick = user_message.nick;
+                                    user.userid = user_message.userid;
+                                    user.services = user_message.services;
+                                    UserDetails.add(user);
+                                }
+                                else
+                                    user = UserDetails.getByUserid(user_message.userid);
+
+                                user.nick = user_message.nick;
+                                user.services = user_message.services;
+                                Console.WriteLine("Got usermessage from {0} state of {1}, nick of {2}", user.userid, user_message.state, user_message.nick);
+
+                                foreach (Service s in user_message.services)
+                                {
+                                    Console.WriteLine("Service {0} {1}", s.service_name, s.port_ranges[0].start);
+                                }
+
+                                if (user_message.state == MessageState.Deleted)
+                                    UserDetails.remove(user_message.userid);
+
+                                break;
+
+                            case MessageType.ChatMessage:
+                                var chat_message = (ChatMessage)m;
+                                Console.WriteLine("[{0}] {1}: {2}", chat_message.time.DateTime.ToShortTimeString(), UserDetails.getByUserid(chat_message.userid).nick, chat_message.message);
+                                break;
+
+                            case MessageType.PingRequestMessage:
+                                var request_message = (PingRequestMessage)m;
+                                var sender = UserDetails.getByUserid(request_message.userid);
+                                Console.WriteLine("{0} ({1}) [{4}] is requesting we connect to them from {2} to {3}", sender.userid, sender.nick, request_message.localport, request_message.remoteport, request_message.ip);
+                                var tunnel = new Tunnel(request_message.localport, request_message.ip, request_message.remoteport);
+                                Tunnel.addTunnel(tunnel);
+                                break;
+
+                            default:
+                                Console.WriteLine("Got unknown usermessage of type {0}", m.type);
+                                break;
+                        }
+                    }
+                    else // Disconnect
+                    {
+                        Console.WriteLine("Server left");
+                        exit = true;
+                    }
+
                     readyForStream.Set();
                 }
 
@@ -106,10 +177,50 @@ namespace NetTunnel
                         inputLine = "";
                     }
 
+                    Message message;
+                    int length;
+                    byte[] serialized;
+
                     switch (op)
                     {
                         case "c":
-                            stream.Write(encoding.GetBytes(inputLine), 0, inputLine.Length);
+                            message = new ChatMessage(UserDetails.local_user.userid, inputLine);
+                            serialized = Utilities.writeMessage(message, out length);
+                            stream.Write(BitConverter.GetBytes(length), 0, sizeof(int));
+                            stream.Write(serialized, 0, length);
+                            stream.Flush();
+                            break;
+
+                        case "n":
+                            UserDetails.local_user.nick = inputLine;
+                            message = UserDetails.local_user.toUserMessage();
+                            serialized = Utilities.writeMessage(message, out length);
+                            stream.Write(BitConverter.GetBytes(length), 0, sizeof(int));
+                            stream.Write(serialized, 0, length);
+                            stream.Flush();
+                            break;
+
+                        case "s":
+                            var words = inputLine.Split(' ');
+                            var service = new Service(words[0]);
+                            service.port_ranges = new PortRange[1];
+                            service.port_ranges[0] = new PortRange(ushort.Parse(words[1]), Protocols.BOTH);
+                            UserDetails.local_user.services.Add(service);
+
+                            message = UserDetails.local_user.toUserMessage();
+                            serialized = Utilities.writeMessage(message, out length);
+                            stream.Write(BitConverter.GetBytes(length), 0, sizeof(int));
+                            stream.Write(serialized, 0, length);
+                            stream.Flush();
+                            break;
+
+                        case "t":
+                            var peices = inputLine.Split(' ');
+                            var request = new PingRequestMessage(UserDetails.local_user.userid,ulong.Parse(peices[0]), ushort.Parse(peices[1]), ushort.Parse(peices[2]));
+
+                            serialized = Utilities.writeMessage(request, out length);
+                            stream.Write(BitConverter.GetBytes(length), 0, sizeof(int));
+                            stream.Write(serialized, 0, length);
                             stream.Flush();
                             break;
 
@@ -123,11 +234,13 @@ namespace NetTunnel
                             break;
                     }
 
-                    readyForInput.Set();
+                    if (!exit)
+                        readyForInput.Set();
                 }
             }
 
             stream.Dispose(); // So the stream thread can stop blocking!
+            input_thread.Interrupt();            
         }
 
     }

@@ -2,16 +2,10 @@
 using System.Text.RegularExpressions;
 using System.Linq;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace NetTunnel
 {
-    public class Protocol
-    {
-        public static readonly ushort PORT = 4141;
-        public static readonly byte[] MAGIC_NUM = { 0xBA, 0xBE, 0xCA, 0xFE };
-        public static readonly int MAX_MESSAGE_SIZE = 1024;
-    }
-
     [Flags]
     public enum Protocols
     {
@@ -20,10 +14,16 @@ namespace NetTunnel
         BOTH = TCP | UDP
     }
 
+    [DataContract]
     public struct PortRange
     {
+        [DataMember]
         public ushort start;
+
+        [DataMember]
         public ushort end;
+
+        [DataMember]
         public Protocols protocols;
 
         public PortRange(ushort port, Protocols protocols)
@@ -75,10 +75,16 @@ namespace NetTunnel
         }
     }
 
+    [DataContract]
     public class Service : IComparable<Service>
     {
+        [DataMember]
         public string service_name;
+
+        [DataMember]
         public bool enabled = true;
+
+        [DataMember]
         public PortRange[] port_ranges = null;
 
         public Service(string service_name)
@@ -142,7 +148,7 @@ namespace NetTunnel
     /// <summary>
     /// Services we are currently sharing with the world.
     /// </summary>
-    public class SharedServices
+    public class SharedServices // TODO: Is this needed anymore?
     {
         public static readonly List<Service> services = new List<Service>();
 

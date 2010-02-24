@@ -6,6 +6,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.IO;
+using System.Diagnostics;
+using System.Linq;
+using ProtoBuf;
 
 namespace NetTunnel
 {
@@ -24,9 +27,17 @@ namespace NetTunnel
         {
             while (!exit)
             {
-                inputLine = Console.ReadLine().Trim();
-                inputRead.Set();
-                readyForInput.WaitOne();
+                inputLine = Console.ReadLine();
+                if (inputLine != null) // Mono doesn't appear to block on readline and can return null
+                {
+                    inputLine.Trim();
+                    inputRead.Set();
+                    readyForInput.WaitOne();
+                }
+                else
+                {
+                    Thread.Sleep(100);
+                }
             }
         }
 
@@ -41,9 +52,9 @@ namespace NetTunnel
             TcpListener listener = new TcpListener(IPAddress.Any, Protocol.PORT);
             listener.Start();
 
-            var socketToClient = new Dictionary<Socket, TcpClient>();
+            var socketToClient = new Dictionary<Socket, ClientDetails>();
 
-            byte[] buffer = new byte[64];
+            byte[] buffer = new byte[Protocol.MAX_MESSAGE_SIZE];
 
             while (!exit)
             {
@@ -66,12 +77,11 @@ namespace NetTunnel
                     switch (op)
                     {
                         case "test":
-                            var t = new TestMessage();
-                            t.str = "Zoot-a-nation";
-                            var ds = new DataContractSerializer(typeof(Message));
-                            var memory_stream = new MemoryStream();
-                            ds.WriteObject(memory_stream, t);
-                            broadcast(memory_stream.GetBuffer(), (int)memory_stream.Length);
+                          //var t = new TestMessage();
+                          //t.str = "Zoot-a-nation";
+                          //int length;
+                          //var serialized = Utilities.writeMessage(t, out length);
+                          //broadcast(serialized, length);
                             break;
 
 
@@ -97,28 +107,101 @@ namespace NetTunnel
                 {
                     if (socket == listener.Server) // It's our listener
                     {
-                        var client = listener.AcceptTcpClient();
-                        Console.WriteLine("Client connected");
-                        sockets.Add(client.Client);
-                        clients.Add(client);
-                        socketToClient.Add(client.Client, client);
+                        var tcp_client = listener.AcceptTcpClient();
+
+                        DebugMessage.msg("Client with IP {0} connected".F(tcp_client.Client.RemoteEndPoint.ToString()));
+
+                        var client_details = new ClientDetails();
+                        client_details.nick = "Unnamed";
+                        client_details.tcp_client = tcp_client;                        
+
+                        sockets.Add(tcp_client.Client);                        
+                        socketToClient.Add(tcp_client.Client, client_details);
+
+                        Message m = new RegistrationMessage( client_details.userid );
+                        int length;
+                        Serializer.SerializeWithLengthPrefix(tcp_client.GetStream(), m, PrefixStyle.Base128);
+                        
+                        // Tell them about other connected clients
+                        foreach (ClientDetails client in clients)
+                        {
+                            m = new UserMessage( client.state.nick, client.state.userid );
+                            ((UserMessage)m).state = MessageState.Created;
+                            ((UserMessage)m).services = client.state.services;
+                            serialized = Utilities.writeMessage(m, out length);
+                            stream.Write(BitConverter.GetBytes(length), 0, sizeof(int));
+                            stream.Write(serialized, 0, length);
+                        }
+
+                        stream.Flush();
+                        clients.Add(client_details);
                     }
                     else
                     {
-                        var client = socketToClient[socket];
-                        // Do we have to use using?
-                        var stream = client.GetStream();
-                        int size = stream.Read(buffer, 0, buffer.Length);
-                        if (size > 0) // Data
+                        var client_details = socketToClient[socket];
+
+                        if (socket.Available == 0)
                         {
-                            broadcast(buffer, size);
-                        }
-                        else // They disconnected
-                        {
-                            Console.WriteLine("Client disconnected");
-                            clients.Remove(client);
+                            DebugMessage.msg("Client with IP {0} disconnected".F(client_details.tcp_client.Client.RemoteEndPoint.ToString()));
+                            clients.Remove(client_details);
                             sockets.Remove(socket);
                             socketToClient.Remove(socket);
+
+                            var user_message = new UserMessage(client_details.nick, client_details.userid);
+                            user_message.state = MessageState.Deleted;
+                            int length;
+                            var msg = Utilities.writeMessage(user_message, out length);
+                            broadcast(msg, length);
+                            continue;
+                        }
+
+                        var stream = client_details.tcp_client.GetStream();
+                        byte[] len = new byte[sizeof(int)];
+                        stream.Read(len, 0, len.Length);
+                        int size = stream.Read(buffer, 0, buffer.Length);
+                        Debug.Assert(size > 0, "Sanity error!");
+                        var m = Utilities.readMessage(buffer, size);
+                        // TODO, add validation they are who they say they are
+
+                        switch (m.type)
+                        {
+                            case MessageType.UserMessage:
+                                var user_message = (UserMessage)m;
+                                Console.WriteLine("Got usermessage from {0}, nick of {1}", user_message.userid, user_message.nick);
+                                client_details.nick = user_message.nick;
+                                client_details.state = user_message;
+                                broadcast(buffer, size);
+                                break;
+
+                            case MessageType.ChatMessage:
+                                var chat_message = (ChatMessage)m;
+                                Console.WriteLine("Got chat message [{0}] {1}: {2}", chat_message.time.DateTime.ToShortTimeString(), client_details.nick, chat_message.message);
+                                broadcast(buffer, size);
+                                break;
+
+                            case MessageType.PingRequestMessage:
+                                var request_message = (PingRequestMessage)m;
+                                var recipient = (ClientDetails)clients.ToArray().Single(r => ((ClientDetails)r).userid == request_message.to_userid);
+                                request_message.ip = ((IPEndPoint)socket.RemoteEndPoint).Address;
+                                Console.WriteLine("Got ping request from {0} ({1}) to {2} ({3}), r{4} l{5}", client_details.userid, client_details.nick, recipient.userid, recipient.nick, request_message.remoteport, request_message.localport);
+
+                                int length;
+                                var serialized = Utilities.writeMessage(request_message, out length);
+                                var stream2 = recipient.tcp_client.GetStream();
+                                stream2.Write(BitConverter.GetBytes(length), 0, sizeof(int));
+                                stream2.Write(serialized, 0, length);
+
+                                var request_message2 = new PingRequestMessage(request_message.to_userid, request_message.userid, request_message.localport, request_message.remoteport);
+                                request_message2.ip = ((IPEndPoint)recipient.tcp_client.Client.RemoteEndPoint).Address;
+                                serialized = Utilities.writeMessage(request_message2, out length);
+                                stream2 = client_details.tcp_client.GetStream();
+                                stream2.Write(BitConverter.GetBytes(length), 0, sizeof(int));
+                                stream2.Write(serialized, 0, length);
+                                break;
+
+                            default:
+                                Console.WriteLine("Got unknown usermessage of type {0}", m.type);
+                                break;
                         }
                     }
                 }
@@ -127,9 +210,11 @@ namespace NetTunnel
 
         static void broadcast(byte[] msg, int length)
         {
-            foreach (TcpClient client in clients)
+            foreach (ClientDetails client_details in clients)
             {
-                client.GetStream().Write(msg, 0, length);
+                var stream = client_details.tcp_client.GetStream();
+                stream.Write(BitConverter.GetBytes(length), 0, sizeof(int));
+                stream.Write(msg, 0, length);
             }
         }
     }
