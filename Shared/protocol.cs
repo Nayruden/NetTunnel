@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Net;
+using ProtoBuf;
 
 namespace NetTunnel
 {
@@ -31,14 +32,14 @@ namespace NetTunnel
     }
 
     [DataContract]
-    [KnownType(typeof(RegistrationMessage))]
-    [KnownType(typeof(ChatMessage))]
-    [KnownType(typeof(UserMessage))]
-    [KnownType(typeof(PingRequestMessage))]
-    [KnownType(typeof(PingMessage))]
+    [ProtoInclude(1,typeof(RegistrationMessage))]
+    [ProtoInclude(11,typeof(ChatMessage))]
+    [ProtoInclude(12,typeof(UserMessage))]
+    [ProtoInclude(13,typeof(PingRequestMessage))]
+    [ProtoInclude(14,typeof(PingMessage))]
     public abstract class Message
     {
-        [DataMember]
+        [DataMember(Order=2)]
         public MessageType type;
     }
 
@@ -54,7 +55,7 @@ namespace NetTunnel
     [DataContract]
     public class RegistrationMessage : Message
     {
-        [DataMember]
+        [DataMember(Order = 2)]
         public ulong userid;
 
         public RegistrationMessage(ulong userid)
@@ -62,18 +63,20 @@ namespace NetTunnel
             this.userid = userid;
             this.type = MessageType.RegistrationMessage;
         }
+
+        public RegistrationMessage() { }
     }
 
     [DataContract]
     public class ChatMessage : Message
     {
-        [DataMember]
+        [DataMember(Order = 2)]
         public string message;
 
-        [DataMember]
+        [DataMember(Order = 3)]
         public DateTimeOffset time;
 
-        [DataMember]
+        [DataMember(Order = 4)]
         public ulong userid;
 
         public ChatMessage(ulong userid, string message)
@@ -83,21 +86,23 @@ namespace NetTunnel
             this.time = DateTimeOffset.Now;
             this.type = MessageType.ChatMessage;
         }
+
+        public ChatMessage() { }
     }
 
     [DataContract]
     public class UserMessage : Message
     {
-        [DataMember]
+        [DataMember(Order = 2)]
         public MessageState state;
 
-        [DataMember]
+        [DataMember(Order = 3)]
         public string nick;
 
-        [DataMember]
+        [DataMember(Order = 4)]
         public ulong userid;
 
-        [DataMember]
+        [DataMember(Order = 5)]
         public List<Service> services = new List<Service>();
 
         public UserMessage( string nick, ulong userid )
@@ -106,30 +111,32 @@ namespace NetTunnel
             this.nick = nick;
             this.userid = userid;
         }
+
+        public UserMessage() { }
     }
 
     [DataContract]
     public class PingRequestMessage : Message
     {
-        [DataMember]
+        [DataMember(Order = 2)]
         public ulong userid;
 
-        [DataMember]
+        [DataMember(Order = 3)]
         public IPAddress ip;
 
-        [DataMember]
+        [DataMember(Order = 4)]
         public ulong to_userid;
 
         /// <summary>
         /// Remote port, the receiver of this message should ping this port.
         /// </summary>
-        [DataMember]
+        [DataMember(Order = 5)]
         public ushort remoteport;
 
         /// <summary>
         /// Local port, the receiver of this message should ping from this port.
         /// </summary>
-        [DataMember]
+        [DataMember(Order = 6)]
         public ushort localport;
 
         public PingRequestMessage( ulong userid, ulong to_userid, ushort remoteport, ushort localport )
@@ -140,5 +147,7 @@ namespace NetTunnel
             this.remoteport = remoteport;
             this.localport = localport;
         }
+
+        public PingRequestMessage() { }
     }
 }

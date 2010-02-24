@@ -119,7 +119,6 @@ namespace NetTunnel
                         socketToClient.Add(tcp_client.Client, client_details);
 
                         Message m = new RegistrationMessage( client_details.userid );
-                        int length;
                         Serializer.SerializeWithLengthPrefix(tcp_client.GetStream(), m, PrefixStyle.Base128);
                         
                         // Tell them about other connected clients
@@ -128,12 +127,9 @@ namespace NetTunnel
                             m = new UserMessage( client.state.nick, client.state.userid );
                             ((UserMessage)m).state = MessageState.Created;
                             ((UserMessage)m).services = client.state.services;
-                            serialized = Utilities.writeMessage(m, out length);
-                            stream.Write(BitConverter.GetBytes(length), 0, sizeof(int));
-                            stream.Write(serialized, 0, length);
+                            Serializer.SerializeWithLengthPrefix(tcp_client.GetStream(), m, PrefixStyle.Base128);
                         }
 
-                        stream.Flush();
                         clients.Add(client_details);
                     }
                     else
@@ -149,18 +145,12 @@ namespace NetTunnel
 
                             var user_message = new UserMessage(client_details.nick, client_details.userid);
                             user_message.state = MessageState.Deleted;
-                            int length;
-                            var msg = Utilities.writeMessage(user_message, out length);
-                            broadcast(msg, length);
+                            broadcast(user_message);
                             continue;
                         }
 
                         var stream = client_details.tcp_client.GetStream();
-                        byte[] len = new byte[sizeof(int)];
-                        stream.Read(len, 0, len.Length);
-                        int size = stream.Read(buffer, 0, buffer.Length);
-                        Debug.Assert(size > 0, "Sanity error!");
-                        var m = Utilities.readMessage(buffer, size);
+                        var m = Serializer.DeserializeWithLengthPrefix<Message>(stream, PrefixStyle.Base128);
                         // TODO, add validation they are who they say they are
 
                         switch (m.type)
@@ -170,13 +160,13 @@ namespace NetTunnel
                                 Console.WriteLine("Got usermessage from {0}, nick of {1}", user_message.userid, user_message.nick);
                                 client_details.nick = user_message.nick;
                                 client_details.state = user_message;
-                                broadcast(buffer, size);
+                                broadcast(user_message);
                                 break;
 
                             case MessageType.ChatMessage:
                                 var chat_message = (ChatMessage)m;
                                 Console.WriteLine("Got chat message [{0}] {1}: {2}", chat_message.time.DateTime.ToShortTimeString(), client_details.nick, chat_message.message);
-                                broadcast(buffer, size);
+                                broadcast(chat_message);
                                 break;
 
                             case MessageType.PingRequestMessage:
@@ -185,18 +175,12 @@ namespace NetTunnel
                                 request_message.ip = ((IPEndPoint)socket.RemoteEndPoint).Address;
                                 Console.WriteLine("Got ping request from {0} ({1}) to {2} ({3}), r{4} l{5}", client_details.userid, client_details.nick, recipient.userid, recipient.nick, request_message.remoteport, request_message.localport);
 
-                                int length;
-                                var serialized = Utilities.writeMessage(request_message, out length);
                                 var stream2 = recipient.tcp_client.GetStream();
-                                stream2.Write(BitConverter.GetBytes(length), 0, sizeof(int));
-                                stream2.Write(serialized, 0, length);
+                                Serializer.SerializeWithLengthPrefix(stream2, request_message, PrefixStyle.Base128);
 
                                 var request_message2 = new PingRequestMessage(request_message.to_userid, request_message.userid, request_message.localport, request_message.remoteport);
                                 request_message2.ip = ((IPEndPoint)recipient.tcp_client.Client.RemoteEndPoint).Address;
-                                serialized = Utilities.writeMessage(request_message2, out length);
-                                stream2 = client_details.tcp_client.GetStream();
-                                stream2.Write(BitConverter.GetBytes(length), 0, sizeof(int));
-                                stream2.Write(serialized, 0, length);
+                                Serializer.SerializeWithLengthPrefix(stream2, request_message2, PrefixStyle.Base128);
                                 break;
 
                             default:
@@ -208,13 +192,12 @@ namespace NetTunnel
             }
         }
 
-        static void broadcast(byte[] msg, int length)
+        static void broadcast(Message m)
         {
             foreach (ClientDetails client_details in clients)
             {
                 var stream = client_details.tcp_client.GetStream();
-                stream.Write(BitConverter.GetBytes(length), 0, sizeof(int));
-                stream.Write(msg, 0, length);
+                Serializer.SerializeWithLengthPrefix(stream, m, PrefixStyle.Base128);
             }
         }
     }

@@ -9,21 +9,22 @@ namespace NetTunnel
     [Flags]
     public enum Protocols
     {
+        NONE = 0, // Special case
         TCP = 1,
         UDP = 2,
         BOTH = TCP | UDP
     }
 
     [DataContract]
-    public struct PortRange
+    public class PortRange
     {
-        [DataMember]
+        [DataMember(Order = 1)]
         public ushort start;
 
-        [DataMember]
+        [DataMember(Order = 2)]
         public ushort end;
 
-        [DataMember]
+        [DataMember(Order = 3)]
         public Protocols protocols;
 
         public PortRange(ushort port, Protocols protocols)
@@ -38,6 +39,8 @@ namespace NetTunnel
             this.end = end;
             this.protocols = protocols;
         }
+
+        public PortRange() { }
 
         public bool parseRange(string text, out ushort start, out ushort end)
         {
@@ -78,19 +81,21 @@ namespace NetTunnel
     [DataContract]
     public class Service : IComparable<Service>
     {
-        [DataMember]
+        [DataMember(Order = 1)]
         public string service_name;
 
-        [DataMember]
+        [DataMember(Order = 2)]
         public bool enabled = true;
 
-        [DataMember]
+        [DataMember(Order = 3)]
         public PortRange[] port_ranges = null;
 
         public Service(string service_name)
         {
             this.service_name = service_name;
         }
+
+        public Service() { }
 
         public override string ToString()
         {

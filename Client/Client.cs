@@ -4,6 +4,7 @@ using System.Threading;
 using System.Net.Sockets;
 using System.IO;
 using System.Runtime.Serialization;
+using ProtoBuf;
 
 namespace NetTunnel
 {
@@ -19,7 +20,7 @@ namespace NetTunnel
 
         private static volatile string inputLine;
         private static volatile byte[] buffer = new byte[Protocol.MAX_MESSAGE_SIZE];
-        private static volatile int buffer_length;
+        private static volatile Message read_message;
         private static volatile NetworkStream stream;
         public static volatile bool exit = false;
 
@@ -50,10 +51,7 @@ namespace NetTunnel
                 {               
                     while (!exit)
                     {
-                        byte[] size = new byte[sizeof(int)];
-                        stream.Read(size, 0, size.Length);
-
-                        buffer_length = stream.Read(buffer, 0, Math.Min(buffer.Length, BitConverter.ToInt32(size, 0)));
+                        read_message = Serializer.DeserializeWithLengthPrefix<Message>(stream, PrefixStyle.Base128);
 
                         streamRead.Set();
                         readyForStream.WaitOne();
@@ -85,9 +83,9 @@ namespace NetTunnel
             {
                 if (streamRead.WaitOne(100)) // Wait 100 ms for stream to be read
                 {
-                    if (buffer_length > 0) // Data available
+                    if (read_message != null) // Data available
                     {
-                        var m = Utilities.readMessage(buffer, buffer_length);
+                        var m = read_message;
 
                         switch (m.type)
                         {
@@ -97,12 +95,12 @@ namespace NetTunnel
                                 // Send the initial information
                                 UserDetails.local_user.nick = "Unnamed";
                                 UserDetails.local_user.userid = registration_message.userid;
-                                UserDetails.local_user.services.Add(new Service("vent"));
+                                var service = new Service("vent");
+                                service.port_ranges = new PortRange[1];
+                                service.port_ranges[0] = new PortRange(4149, Protocols.BOTH);
+                                UserDetails.local_user.services.Add(service);
                                 var message = UserDetails.local_user.toUserMessage(MessageState.Created);
-                                int length;
-                                var serialized = Utilities.writeMessage(message, out length);
-                                stream.Write(BitConverter.GetBytes(length), 0, sizeof(int));
-                                stream.Write(serialized, 0, length);
+                                Serializer.SerializeWithLengthPrefix(stream, message, PrefixStyle.Base128);
                                 break;
 
                             case MessageType.UserMessage:
@@ -178,26 +176,18 @@ namespace NetTunnel
                     }
 
                     Message message;
-                    int length;
-                    byte[] serialized;
 
                     switch (op)
                     {
                         case "c":
                             message = new ChatMessage(UserDetails.local_user.userid, inputLine);
-                            serialized = Utilities.writeMessage(message, out length);
-                            stream.Write(BitConverter.GetBytes(length), 0, sizeof(int));
-                            stream.Write(serialized, 0, length);
-                            stream.Flush();
+                            Serializer.SerializeWithLengthPrefix(stream, message, PrefixStyle.Base128);
                             break;
 
                         case "n":
                             UserDetails.local_user.nick = inputLine;
                             message = UserDetails.local_user.toUserMessage();
-                            serialized = Utilities.writeMessage(message, out length);
-                            stream.Write(BitConverter.GetBytes(length), 0, sizeof(int));
-                            stream.Write(serialized, 0, length);
-                            stream.Flush();
+                            Serializer.SerializeWithLengthPrefix(stream, message, PrefixStyle.Base128);
                             break;
 
                         case "s":
@@ -208,20 +198,13 @@ namespace NetTunnel
                             UserDetails.local_user.services.Add(service);
 
                             message = UserDetails.local_user.toUserMessage();
-                            serialized = Utilities.writeMessage(message, out length);
-                            stream.Write(BitConverter.GetBytes(length), 0, sizeof(int));
-                            stream.Write(serialized, 0, length);
-                            stream.Flush();
+                            Serializer.SerializeWithLengthPrefix(stream, message, PrefixStyle.Base128);
                             break;
 
                         case "t":
                             var peices = inputLine.Split(' ');
-                            var request = new PingRequestMessage(UserDetails.local_user.userid,ulong.Parse(peices[0]), ushort.Parse(peices[1]), ushort.Parse(peices[2]));
-
-                            serialized = Utilities.writeMessage(request, out length);
-                            stream.Write(BitConverter.GetBytes(length), 0, sizeof(int));
-                            stream.Write(serialized, 0, length);
-                            stream.Flush();
+                            message = new PingRequestMessage(UserDetails.local_user.userid,ulong.Parse(peices[0]), ushort.Parse(peices[1]), ushort.Parse(peices[2]));
+                            Serializer.SerializeWithLengthPrefix(stream, message, PrefixStyle.Base128);;
                             break;
 
                         case "exit":
