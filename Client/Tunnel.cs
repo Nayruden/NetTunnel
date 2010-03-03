@@ -10,6 +10,7 @@ using SharpPcap;
 using PacketDotNet;
 using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace NetTunnel
 {
@@ -20,6 +21,7 @@ namespace NetTunnel
         private static List<LivePcapDevice> devices;
         private static Dictionary<LivePcapDevice, string> deviceMACs = new Dictionary<LivePcapDevice,string>();
         private static Dictionary<LivePcapDevice, PhysicalAddress> destMACs = new Dictionary<LivePcapDevice, PhysicalAddress>();
+        private static IPAddress gateway_ip = new IPAddress(new byte[] { 0x00, 0x00, 0x00, 0x00 });
 
         static Tunnel()
         {
@@ -44,7 +46,7 @@ namespace NetTunnel
                     continue; // HACK: Linux bug workaround
                 }
                 dev.Open();
-                dev.OnPacketArrival += new PacketArrivalEventHandler(receive);              
+                dev.OnPacketArrival += new PacketArrivalEventHandler(receive);
 
                 var bytes = dev.Interface.MacAddress.GetAddressBytes();
                 StringBuilder sb = new StringBuilder();
@@ -54,6 +56,21 @@ namespace NetTunnel
                 }
                 sb.Remove(sb.Length - 1, 1);
                 deviceMACs[ dev ] = sb.ToString();
+
+                // Determine gateway IP
+                if (!File.Exists("gatewayip.txt"))
+                {
+                    gateway_ip = dev.Interface.GatewayAddress;
+                }
+                else
+                {
+                    using (var f = File.OpenRead("gatewayip.txt"))
+                    using (var reader = new StreamReader(f))
+                    {
+                        var ip = reader.ReadLine().Trim();
+                        gateway_ip = IPAddress.Parse(ip);
+                    }
+                }
 
                 // Get dest MAC
                 var p = new Process();
@@ -69,7 +86,7 @@ namespace NetTunnel
                 var lines = output.Split('\n');
                 foreach (var line in lines)
                 {
-                    if (Regex.IsMatch(line, @"\D" + Regex.Escape(dev.Interface.GatewayAddress.ToString()) + @"\D"))
+                    if (Regex.IsMatch(line, @"\D" + Regex.Escape(gateway_ip.ToString()) + @"\D"))
                     {
                         var m = Regex.Match(line, @"[\da-f]{1,2}[:-][\da-f]{1,2}[:-][\da-f]{1,2}[:-][\da-f]{1,2}[:-][\da-f]{1,2}[:-][\da-f]{1,2}", RegexOptions.IgnoreCase).Value;
                         var seperated = m.Split(':', '-');
@@ -133,16 +150,6 @@ namespace NetTunnel
 
                 foreach (var tunnel in tunnels)
                 {
-                    var ping = new PingMessage();
-                    //int length;
-                    //var serialized = Utilities.writeMessage(ping, out length);
-
-                    var tcp_packet = new TcpPacket(tunnel.local_port, tunnel.remote_port);
-                    tcp_packet.PayloadData = Protocol.MAGIC_NUM;
-
-                    var udp_packet = new UdpPacket(tunnel.local_port, tunnel.remote_port);
-                    udp_packet.PayloadData = Protocol.MAGIC_NUM;
-
                     foreach (var dev in devices)
                     {
                         if (!destMACs.ContainsKey(dev)) continue;
@@ -156,24 +163,7 @@ namespace NetTunnel
                                 break;
                             }
                         }
-                        var ip_dest = tunnel.ip;
-                        var ip_packet = new IPv4Packet(ip_source, ip_dest);
-                        ip_packet.TimeToLive = 15;
-
-                        var ethernetSourceHwAddress = System.Net.NetworkInformation.PhysicalAddress.Parse( deviceMACs[ dev ].Replace( ":", "-" ) );
-                        var ethernetDestinationHwAddress = System.Net.NetworkInformation.PhysicalAddress.Parse("FF-FF-FF-FF-FF-FF");
-                        // NOTE: using EthernetPacketType.None to illustrate that the ethernet
-                        //       protocol type is updated based on the packet payload that is
-                        //       assigned to that particular ethernet packet
-                        var ethernetPacket = new EthernetPacket(ethernetSourceHwAddress,
-                                                                ethernetDestinationHwAddress,
-                                                                EthernetPacketType.None);
-
-                        // Now stitch all of the packets together
-                        //ip_packet.PayloadPacket = tcp_packet;
-                        //ethernetPacket.PayloadPacket = ip_packet;
-
-                        //dev.SendPacket(ethernetPacket.Bytes);
+                        var ip_dest = tunnel.ip;                    
 
                         var packet = new List<byte>();
                         var ethernet = new List<byte>();

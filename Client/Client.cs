@@ -44,7 +44,7 @@ namespace NetTunnel
         static void readStream()
         {
             using (var client = new TcpClient("server.ulyssesmod.net", Protocol.PORT))
-            //using (var client = new TcpClient("192.168.0.110", Protocol.PORT))
+            //using (var client = new TcpClient("192.168.0.145", Protocol.PORT))
             using (stream = client.GetStream())            
             {
                 try

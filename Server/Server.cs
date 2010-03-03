@@ -180,7 +180,7 @@ namespace NetTunnel
 
                                 var request_message2 = new PingRequestMessage(request_message.to_userid, request_message.userid, request_message.localport, request_message.remoteport);
                                 request_message2.ip = ((IPEndPoint)recipient.tcp_client.Client.RemoteEndPoint).Address;
-                                Serializer.SerializeWithLengthPrefix(stream2, request_message2, PrefixStyle.Base128);
+                                Serializer.SerializeWithLengthPrefix(stream, request_message2, PrefixStyle.Base128);
                                 break;
 
                             default:

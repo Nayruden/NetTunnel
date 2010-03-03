@@ -10,7 +10,7 @@ namespace NetTunnel
     public class Protocol
     {
         public static readonly ushort PORT = 4141;
-        public static readonly byte[] MAGIC_NUM = { 0xDE, 0xAD, 0xCA, 0xFE };
+        public static readonly byte[] MAGIC_NUM = { 0xDE, 0xAD, 0xCA, 0xFE, 0xBE, 0xEF, 0xBA, 0xBE };
         public static readonly int MAX_MESSAGE_SIZE = 1024;
     }
 

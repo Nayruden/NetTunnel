@@ -35,4 +35,39 @@ namespace NetTunnel
             Console.WriteLine(s);
         }
     }
+
+    public class Utilities
+    {
+        public static Int16 reverseEndian(Int16 n)
+        {
+            return (Int16)(n >> 8 | n << 8);
+        }
+
+        public static UInt16 reverseEndian(UInt16 n)
+        {
+            return (UInt16)(n >> 8 | n << 8);
+        }
+
+        public static Int32 reverseEndian(Int32 n)
+        {
+            return n >> 24 | (n & 0x00FF0000) >> 8 | (n & 0x0000FF00) << 8 | n << 24;
+        }
+
+        public static UInt32 reverseEndian(UInt32 n)
+        {
+            return n >> 24 | (n & 0x00FF0000) >> 8 | (n & 0x0000FF00) << 8 | n << 24;
+        }
+
+        public static Int64 reverseEndian(Int64 n)
+        {
+            return n >> 56 | (n & 0x00FF000000000000) >> 40 | (n & 0x0000FF0000000000) >> 24 | (n & 0x000000FF00000000) >> 8 |
+                (n & 0x00000000FF000000) << 8 | (n & 0x0000000000FF0000) << 24 | (n & 0x000000000000FF00) << 40 | n << 56;
+        }
+
+        public static UInt64 reverseEndian(UInt64 n)
+        {
+            return n >> 56 | (n & 0x00FF000000000000) >> 40 | (n & 0x0000FF0000000000) >> 24 | (n & 0x000000FF00000000) >> 8 |
+                (n & 0x00000000FF000000) << 8 | (n & 0x0000000000FF0000) << 24 | (n & 0x000000000000FF00) << 40 | n << 56;
+        }
+    }
 }
