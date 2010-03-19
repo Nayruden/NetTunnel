@@ -27,29 +27,22 @@ namespace NetTunnel
         ChatMessage,
         UserMessage,
         RegistrationMessage,
-        PingRequestMessage,
-        PingMessage,
+        TunnelRequestMessage,
+        TryTunnelMessage,
+        OpenPortMessage,
     }
 
     [DataContract]
     [ProtoInclude(1,typeof(RegistrationMessage))]
     [ProtoInclude(11,typeof(ChatMessage))]
     [ProtoInclude(12,typeof(UserMessage))]
-    [ProtoInclude(13,typeof(PingRequestMessage))]
-    [ProtoInclude(14,typeof(PingMessage))]
+    [ProtoInclude(13,typeof(TunnelRequestMessage))]
+    [ProtoInclude(14, typeof(TryTunnelMessage))]
+    [ProtoInclude(15, typeof(OpenPortMessage))]
     public abstract class Message
     {
         [DataMember(Order=2)]
         public MessageType type;
-    }
-
-    [DataContract]
-    public class PingMessage : Message
-    {
-        public PingMessage()
-        {
-            this.type = MessageType.PingMessage;
-        }
     }
 
     [DataContract]
@@ -116,38 +109,75 @@ namespace NetTunnel
     }
 
     [DataContract]
-    public class PingRequestMessage : Message
+    public class TunnelRequestMessage : Message
+    {
+        [DataMember(Order = 2)]
+        public ulong userid;
+
+        public TunnelRequestMessage(ulong userid)
+        {
+            type = MessageType.TunnelRequestMessage;
+            this.userid = userid;
+        }
+
+        public TunnelRequestMessage() { }
+    }
+
+    [DataContract]
+    public class OpenPortMessage : Message
+    {
+        [DataMember(Order = 2)]
+        public ushort port;
+
+        [DataMember(Order = 3)]
+        public ulong userid;
+
+        [DataMember(Order = 4)]
+        public ulong request_num;
+
+        public static ulong last_request = 0;
+
+        public OpenPortMessage(ushort port, ulong userid, ulong request_num)
+        {
+            this.port = port;
+            this.userid = userid;
+            this.request_num = request_num;
+            type = MessageType.OpenPortMessage;
+        }
+
+        public OpenPortMessage()
+        {
+            type = MessageType.OpenPortMessage;
+        }
+    }
+
+    [DataContract]
+    public class TryTunnelMessage : Message
     {
         [DataMember(Order = 2)]
         public ulong userid;
 
         [DataMember(Order = 3)]
-        public IPAddress ip;
+        public IPAddress endpoint_address; // PORT: Would want to store both internal and external
 
         [DataMember(Order = 4)]
-        public ulong to_userid;
+        public ushort endpoint_port;
 
-        /// <summary>
-        /// Remote port, the receiver of this message should ping this port.
-        /// </summary>
         [DataMember(Order = 5)]
-        public ushort remoteport;
+        public ushort origin_port;
 
-        /// <summary>
-        /// Local port, the receiver of this message should ping from this port.
-        /// </summary>
-        [DataMember(Order = 6)]
-        public ushort localport;
+        public IPEndPoint endpoint { get { return new IPEndPoint( endpoint_address, endpoint_port ); } }
+        public IPEndPoint origin { get { return new IPEndPoint(IPAddress.Any, origin_port); } }
 
-        public PingRequestMessage( ulong userid, ulong to_userid, ushort remoteport, ushort localport )
+        public TryTunnelMessage(ulong userid, IPEndPoint endpoint, IPEndPoint origin)
         {
-            this.type = MessageType.PingRequestMessage;
+            type = MessageType.TryTunnelMessage;
             this.userid = userid;
-            this.to_userid = to_userid;
-            this.remoteport = remoteport;
-            this.localport = localport;
+            this.endpoint_port = (ushort)endpoint.Port;
+            this.endpoint_address = endpoint.Address;
+            this.origin_port = (ushort)origin.Port;
         }
 
-        public PingRequestMessage() { }
+        public TryTunnelMessage() { }
     }
 }

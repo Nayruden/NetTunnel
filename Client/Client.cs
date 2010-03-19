@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.IO;
 using System.Runtime.Serialization;
 using ProtoBuf;
+using System.Net;
 
 namespace NetTunnel
 {
@@ -137,12 +138,20 @@ namespace NetTunnel
                                 Console.WriteLine("[{0}] {1}: {2}", chat_message.time.ToShortTimeString(), UserDetails.getByUserid(chat_message.userid).nick, chat_message.message);
                                 break;
 
-                            case MessageType.PingRequestMessage:
-                                var request_message = (PingRequestMessage)m;
-                                var sender = UserDetails.getByUserid(request_message.userid);
-                                Console.WriteLine("{0} ({1}) [{4}] is requesting we connect to them from {2} to {3}", sender.userid, sender.nick, request_message.localport, request_message.remoteport, request_message.ip);
-                                var tunnel = new Tunnel(request_message.localport, request_message.ip, request_message.remoteport);
+                            case MessageType.TryTunnelMessage:
+                                var tunnel_message = (TryTunnelMessage)m;
+                                var sender = UserDetails.getByUserid(tunnel_message.userid);
+                                Console.WriteLine("{0} ({1}) [{4}] is requesting we connect to them from {2} to {3}", sender.userid, sender.nick, tunnel_message.origin.Port, tunnel_message.endpoint.Port, tunnel_message.endpoint.Address.ToString());
+                                var tunnel = new Tunnel(tunnel_message.origin, tunnel_message.endpoint);
                                 Tunnel.addTunnel(tunnel);
+                                break;
+
+                            case MessageType.OpenPortMessage:
+                                var port_message = (OpenPortMessage)m;
+                                var cl = new UdpClient(0);                                
+                                port_message.port = (ushort)((IPEndPoint)cl.Client.LocalEndPoint).Port;
+                                Tunnel.port_to_client[port_message.port] = cl;
+                                Serializer.SerializeWithLengthPrefix(stream, port_message, PrefixStyle.Base128);
                                 break;
 
                             default:
@@ -203,7 +212,7 @@ namespace NetTunnel
 
                         case "t":
                             var peices = inputLine.Split(' ');
-                            message = new PingRequestMessage(UserDetails.local_user.userid,ulong.Parse(peices[0]), ushort.Parse(peices[1]), ushort.Parse(peices[2]));
+                            message = new TunnelRequestMessage(ulong.Parse(peices[0]));
                             Serializer.SerializeWithLengthPrefix(stream, message, PrefixStyle.Base128);;
                             break;
 

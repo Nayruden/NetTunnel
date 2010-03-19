@@ -17,6 +17,8 @@ namespace NetTunnel
         private static ArrayList sockets = new ArrayList();
         private static ArrayList clients = new ArrayList();
 
+        private static ArrayList port_requests = new ArrayList();
+
         private static AutoResetEvent inputRead = new AutoResetEvent(false);
         private static AutoResetEvent readyForInput = new AutoResetEvent(false);
 
@@ -169,18 +171,45 @@ namespace NetTunnel
                                 broadcast(chat_message);
                                 break;
 
-                            case MessageType.PingRequestMessage:
-                                var request_message = (PingRequestMessage)m;
-                                var recipient = (ClientDetails)clients.ToArray().Single(r => ((ClientDetails)r).userid == request_message.to_userid);
-                                request_message.ip = ((IPEndPoint)socket.RemoteEndPoint).Address;
-                                Console.WriteLine("Got ping request from {0} ({1}) to {2} ({3}), r{4} l{5}", client_details.userid, client_details.nick, recipient.userid, recipient.nick, request_message.remoteport, request_message.localport);
+                            case MessageType.TunnelRequestMessage:
+                                var request_message = (TunnelRequestMessage)m;
+                                var recipient = (ClientDetails)clients.ToArray().Single(r => ((ClientDetails)r).userid == request_message.userid);
+                                Console.WriteLine("Got tunnel request from {0} ({1}) to {2} ({3})", client_details.userid, client_details.nick, recipient.userid, recipient.nick);
+
+                                //var tunnel = new TryTunnelMessage(client_details.userid, (IPEndPoint)client_details.tcp_client.Client.RemoteEndPoint, (IPEndPoint)recipient.tcp_client.Client.RemoteEndPoint);
+                                var port = new OpenPortMessage(0, client_details.userid, ++OpenPortMessage.last_request);
 
                                 var stream2 = recipient.tcp_client.GetStream();
-                                Serializer.SerializeWithLengthPrefix(stream2, request_message, PrefixStyle.Base128);
+                                Serializer.SerializeWithLengthPrefix(stream2, port, PrefixStyle.Base128);
 
-                                var request_message2 = new PingRequestMessage(request_message.to_userid, request_message.userid, request_message.localport, request_message.remoteport);
-                                request_message2.ip = ((IPEndPoint)recipient.tcp_client.Client.RemoteEndPoint).Address;
-                                Serializer.SerializeWithLengthPrefix(stream, request_message2, PrefixStyle.Base128);
+                                var port2 = new OpenPortMessage(0, recipient.userid, OpenPortMessage.last_request);
+                                Serializer.SerializeWithLengthPrefix(stream, port2, PrefixStyle.Base128);
+                                break;
+
+                            case MessageType.OpenPortMessage:
+                                var open_message = (OpenPortMessage)m;
+                                var rcpt = (ClientDetails)clients.ToArray().Single(r => ((ClientDetails)r).userid == open_message.userid);
+                                Console.WriteLine("Got open port message from {0} ({1}) to {2} ({3}) (port: {4})", client_details.userid, client_details.nick, rcpt.userid, rcpt.nick, open_message.port);
+
+                                var other_pair = (OpenPortMessage)port_requests.ToArray().SingleOrDefault(r => ((OpenPortMessage)r).request_num == open_message.request_num);
+                                if (other_pair == null) // Still waiting
+                                {
+                                    port_requests.Add(open_message);
+                                }
+                                else
+                                {
+                                    var tunnel = new TryTunnelMessage(other_pair.userid, (IPEndPoint)client_details.tcp_client.Client.RemoteEndPoint, (IPEndPoint)rcpt.tcp_client.Client.RemoteEndPoint);
+                                    tunnel.endpoint_port = open_message.port;
+                                    tunnel.origin_port = other_pair.port;
+
+                                    var str2 = rcpt.tcp_client.GetStream();
+                                    Serializer.SerializeWithLengthPrefix(str2, tunnel, PrefixStyle.Base128);
+
+                                    var tunnel2 = new TryTunnelMessage(client_details.userid, (IPEndPoint)rcpt.tcp_client.Client.RemoteEndPoint, (IPEndPoint)client_details.tcp_client.Client.RemoteEndPoint);
+                                    tunnel2.endpoint_port = other_pair.port;
+                                    tunnel2.origin_port = open_message.port;
+                                    Serializer.SerializeWithLengthPrefix(stream, tunnel2, PrefixStyle.Base128);
+                                }
                                 break;
 
                             default:
