@@ -10,9 +10,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NetTunnel</RootNamespace>
     <AssemblyName>NetTunnel</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ApplicationIcon>NetTunnel.ico</ApplicationIcon>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -50,8 +51,6 @@
     <Compile Include="AboutWindow.Designer.cs">
       <DependentUpon>AboutWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="defs.cs" />
-    <Compile Include="helpers.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,6 +71,9 @@
     <Compile Include="SettingsWindow.Designer.cs">
       <DependentUpon>SettingsWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tunnel.cs" />
+    <Compile Include="User.cs" />
+    <Compile Include="UserManager.cs" />
     <EmbeddedResource Include="AboutWindow.resx">
       <DependentUpon>AboutWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -86,14 +88,13 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="ServicesWindow.resx">
-      <DependentUpon>ServicesWindow.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="SettingsWindow.resx">
       <DependentUpon>SettingsWindow.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="client_overview.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -106,6 +107,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="NetTunnel.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\Shared.csproj">
+      <Project>{373A2F34-E617-4E50-A266-1389A410404E}</Project>
+      <Name>Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

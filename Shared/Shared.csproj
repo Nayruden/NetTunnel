@@ -49,7 +49,9 @@
     <Compile Include="defs.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="protocol.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shared_overview.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

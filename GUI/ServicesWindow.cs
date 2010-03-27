@@ -82,8 +82,8 @@ namespace NetTunnel
         private bool validatePortsBox()
         {
             var trimmed_ports = portsBox.Text.Trim();
-            PortRange port_range = new PortRange();
-            if (trimmed_ports.Length == 0 || !port_range.parseRange(trimmed_ports))
+            ushort begin, end;
+            if (trimmed_ports.Length == 0 || !PortRange.parseRange(trimmed_ports, out begin, out end))
             {
                 portsBox.BackColor = Color.MistyRose;
                 return false;

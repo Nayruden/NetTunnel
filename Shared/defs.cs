@@ -9,7 +9,10 @@ namespace NetTunnel
     [Flags]
     public enum Protocols
     {
-        NONE = 0, // Special case
+        /// <summary>
+        /// 'NONE' needs to be defined for the serializer
+        /// </summary>
+        NONE = 0,
         TCP = 1,
         UDP = 2,
         BOTH = TCP | UDP
@@ -19,13 +22,13 @@ namespace NetTunnel
     public class PortRange
     {
         [DataMember(Order = 1)]
-        public ushort start;
+        public ushort start { get; set; }
 
         [DataMember(Order = 2)]
-        public ushort end;
+        public ushort end { get; set; }
 
         [DataMember(Order = 3)]
-        public Protocols protocols;
+        public Protocols protocols { get; set; }
 
         public PortRange(ushort port, Protocols protocols)
         {
@@ -42,7 +45,14 @@ namespace NetTunnel
 
         public PortRange() { }
 
-        public bool parseRange(string text, out ushort start, out ushort end)
+        /// <summary>
+        /// Parses a string into a port range. Recognizes inputs like "80" and "100-120".
+        /// </summary>
+        /// <param name="text">The text to parse.</param>
+        /// <param name="start">The starting port resulting from the text parse.</param>
+        /// <param name="end">The ending port resulting from the text parse.</param>
+        /// <returns>A bool stating whether or not it was successfully parsed.</returns>
+        public static bool parseRange(string text, out ushort start, out ushort end)
         {
             if (!Regex.Match(text, @"^\d+-?\d*$").Success)
             {
@@ -72,30 +82,62 @@ namespace NetTunnel
             return true;
         }
 
+        /// <summary>
+        /// See <see cref="Parse(string, out ushort, out ushort)"/> for details on this function, which acts on this
+        /// instance instead of returning values like <see cref="Parse(string, out ushort, out ushort)"/>.
+        /// </summary>
+        /// <param name="text">The text to parse.</param>
+        /// <returns>A bool stating whether or not it was successfully parsed.</returns>
         public bool parseRange(string text)
         {
-            return parseRange(text, out this.start, out this.end);
+            ushort start, end;
+            var result = parseRange(text, out start, out end);
+            if (!result)
+                return result;
+            else
+            {
+                this.start = start;
+                this.end = end;
+                return result;
+            }
         }
     }
 
+    /// <summary>
+    /// Keeps track of services offered. IE, srcds with several ports on various protocols.
+    /// </summary>
     [DataContract]
     public class Service : IComparable<Service>
     {
+        /// <summary>
+        /// The name of the service. IE, 'apache'.
+        /// </summary>
         [DataMember(Order = 1)]
-        public string service_name;
+        public string service_name { get; set; }
 
+        /// <summary>
+        /// Whether or not the service is enabled for the client.
+        /// </summary>
         [DataMember(Order = 2)]
-        public bool enabled = true;
+        public bool enabled { get; set; }
 
+        /// <summary>
+        /// The ports this service uses.
+        /// </summary>
         [DataMember(Order = 3)]
-        public PortRange[] port_ranges = null;
+        public IList<PortRange> port_ranges { get; set; }
 
         public Service(string service_name)
+            : this()
         {
             this.service_name = service_name;
         }
 
-        public Service() { }
+        private Service()
+        {
+            enabled = true;
+            port_ranges = new List<PortRange>();
+        }
 
         public override string ToString()
         {
@@ -108,7 +150,9 @@ namespace NetTunnel
         }
     }
 
-    // Just a small collection of known services to help in various places in the program
+    /// <summary>
+    /// Just a small collection of known services to help in various places in the program
+    /// </summary>
     public class KnownServices
     {
         public static readonly Service[] services;
@@ -116,44 +160,33 @@ namespace NetTunnel
         static KnownServices()
         {
             var ventrilo = new Service("Ventrilo");
-            ventrilo.port_ranges = new[] 
-        {
-            new PortRange( 3784, Protocols.TCP )
-        };
+            ventrilo.port_ranges.Add(new PortRange(3784, Protocols.TCP));
 
             var srcds = new Service("Srcds");
-            srcds.port_ranges = new[] 
-        {
-            new PortRange( 27005, Protocols.UDP ),
-            new PortRange( 27015, Protocols.BOTH ),
-            new PortRange( 27020, Protocols.UDP )
-        };
+            srcds.port_ranges.Add(new PortRange(27005, Protocols.UDP));
+            srcds.port_ranges.Add(new PortRange(27015, Protocols.BOTH));
+            srcds.port_ranges.Add(new PortRange(27020, Protocols.UDP));
 
             var cities = new Service("Cities Online");
-            cities.port_ranges = new[] 
-        {
-            new PortRange( 7176, Protocols.TCP )
-        };
+            cities.port_ranges.Add( new PortRange( 7176, Protocols.TCP ) );
 
             var apache = new Service("Apache");
-            apache.port_ranges = new[] 
-        {
-            new PortRange( 80, Protocols.TCP )
-        };
+            apache.port_ranges.Add( new PortRange( 80, Protocols.TCP ) );
 
             services = new[] { apache, cities, srcds, ventrilo };
         }
 
         public static Service get(string service_name)
         {
+            // Future: Make this into a hashmap if it grows large
             return services.FirstOrDefault(service => service.service_name == service_name);
         }
     }
 
     /// <summary>
-    /// Services we are currently sharing with the world.
+    /// Services we are currently sharing with the world. TODO: REMOVE THIS.
     /// </summary>
-    public class SharedServices // TODO: Is this needed anymore?
+    public class SharedServices
     {
         public static readonly List<Service> services = new List<Service>();
 
@@ -163,5 +196,4 @@ namespace NetTunnel
             services.AddRange(new[] { KnownServices.get("Apache"), KnownServices.get("Ventrilo") });
         }
     }
-
 }

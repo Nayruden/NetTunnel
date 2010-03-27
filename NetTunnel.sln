@@ -1,9 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{1CEB10DA-29D5-4287-BB02-3B64A8364278}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUI", "GUI\GUI.csproj", "{5BBFA5C4-9B27-41CB-9831-27A66A4F7847}"
+	ProjectSection(ProjectDependencies) = postProject
+		{373A2F34-E617-4E50-A266-1389A410404E} = {373A2F34-E617-4E50-A266-1389A410404E}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{58FD6D38-F568-4D43-909E-188AE6684398}"
 EndProject
@@ -15,10 +16,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1CEB10DA-29D5-4287-BB02-3B64A8364278}.Debug|x86.ActiveCfg = Debug|x86
-		{1CEB10DA-29D5-4287-BB02-3B64A8364278}.Debug|x86.Build.0 = Debug|x86
-		{1CEB10DA-29D5-4287-BB02-3B64A8364278}.Release|x86.ActiveCfg = Release|x86
-		{1CEB10DA-29D5-4287-BB02-3B64A8364278}.Release|x86.Build.0 = Release|x86
 		{5BBFA5C4-9B27-41CB-9831-27A66A4F7847}.Debug|x86.ActiveCfg = Debug|x86
 		{5BBFA5C4-9B27-41CB-9831-27A66A4F7847}.Debug|x86.Build.0 = Debug|x86
 		{5BBFA5C4-9B27-41CB-9831-27A66A4F7847}.Release|x86.ActiveCfg = Release|x86
