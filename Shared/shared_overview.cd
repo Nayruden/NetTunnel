@@ -12,8 +12,14 @@
   </Class>
   <Class Name="NetTunnel.Service" BaseTypeListCollapsed="true">
     <Position X="0.75" Y="4" Width="1.5" />
+    <Members>
+      <Field Name="_port_ranges" Hidden="true" />
+      <Field Name="_service_id" Hidden="true" />
+      <Field Name="_service_name" Hidden="true" />
+      <Field Name="next_service_id" Hidden="true" />
+    </Members>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAQEAACgAAAAAAAAAAAAACAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAEAQEAACgAIAAAgAAAEAAACACAAAAAAA=</HashCode>
       <FileName>defs.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -24,7 +30,7 @@
   <Class Name="NetTunnel.KnownServices" Collapsed="true">
     <Position X="2.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>defs.cs</FileName>
     </TypeIdentifier>
   </Class>

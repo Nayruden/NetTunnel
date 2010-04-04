@@ -32,6 +32,7 @@ namespace NetTunnel
         /// <summary>
         /// Finds a user by remote_userid.
         /// </summary>
+        /// <param name="userid">The userid to find.</param>
         /// <returns>The user or null if none found.</returns>
         public User FindUserID(ulong userid)
         {
@@ -53,6 +54,7 @@ namespace NetTunnel
         /// Removes a user from the manager.
         /// </summary>
         /// <param name="remote_userid">The remote_userid to remove.</param>
+        /// <param name="userid">The userid to remove.</param>
         public void Remove(ulong userid)
         {
             _users.Remove(userid);

@@ -109,34 +109,45 @@ namespace NetTunnel
     [DataContract]
     public class Service : IComparable<Service>
     {
+        private static ushort next_service_id = 0;
+        private readonly ushort _service_id;
+        private readonly string _service_name;
+        private readonly IList<PortRange> _port_ranges;
+
         /// <summary>
         /// The name of the service. IE, 'apache'.
         /// </summary>
         [DataMember(Order = 1)]
-        public string service_name { get; set; }
+        public string service_name { get { return service_name; } }
 
         /// <summary>
-        /// Whether or not the service is enabled for the client.
+        /// Whether or not the service is enabled for the client. If the service is disabled it's not transmitted as part of your client update.
         /// </summary>
-        [DataMember(Order = 2)]
         public bool enabled { get; set; }
 
         /// <summary>
         /// The ports this service uses.
         /// </summary>
+        [DataMember(Order = 2)]
+        public IList<PortRange> port_ranges { get { return _port_ranges; } }
+
+        /// <summary>
+        /// The unique ID (per user) for this service. The ID gets changed every time anything about the Service changes. (Discard old object on change and replace with new)
+        /// </summary>
         [DataMember(Order = 3)]
-        public IList<PortRange> port_ranges { get; set; }
+        public ushort service_id { get { return _service_id; } }
 
         public Service(string service_name)
             : this()
         {
-            this.service_name = service_name;
+            _service_name = service_name;
         }
 
         private Service()
         {
             enabled = true;
-            port_ranges = new List<PortRange>();
+            _port_ranges = new List<PortRange>();
+            _service_id = next_service_id++;
         }
 
         public override string ToString()

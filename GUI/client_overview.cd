@@ -76,10 +76,12 @@
     </TypeIdentifier>
   </Class>
   <Class Name="NetTunnel.Tunnel">
-    <Position X="8" Y="2.25" Width="1.5" />
+    <Position X="8" Y="1.25" Width="2" />
     <Members>
       <Field Name="_is_server" Hidden="true" />
       <Field Name="_remote_userid" Hidden="true" />
+      <Field Name="_server_port" Hidden="true" />
+      <Field Name="_service" Hidden="true" />
     </Members>
     <Compartments>
       <Compartment Name="Nested Types" Collapsed="false" />
@@ -90,9 +92,23 @@
           <NewMemberFileName>Tunnel.cs</NewMemberFileName>
         </TypeIdentifier>
       </Enum>
+      <Class Name="NetTunnel.Tunnel.TunnelManager">
+        <Members>
+          <Field Name="_cancel_token" Hidden="true" />
+          <Field Name="_server_endpoint" Hidden="true" />
+          <Field Name="_tunnels" Hidden="true" />
+          <Field Name="_tunnels_to_add" Hidden="true" />
+          <Method Name="AddWaitingTunnels" Hidden="true" />
+          <Method Name="HandleData" Hidden="true" />
+          <Method Name="SetupTunnels" Hidden="true" />
+        </Members>
+        <TypeIdentifier>
+          <NewMemberFileName>Tunnel.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAACAAAIAEAEAAAAAAQAQIAEIEAAABAAAAA=</HashCode>
+      <HashCode>AAAgAAAQAAACAAAYAEAEAAAAQAQAQIAEIEAAAAAAAAA=</HashCode>
       <FileName>Tunnel.cs</FileName>
     </TypeIdentifier>
   </Class>
