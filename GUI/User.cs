@@ -10,6 +10,11 @@ namespace NetTunnel
         private readonly ulong _userid;
         private readonly List<Service> _services = new List<Service>();
 
+        public User(ulong userid)
+        {
+            _userid = userid;
+        }
+
         /// <summary>
         /// The remote_userid is used to identify the user across the network.
         /// </summary>

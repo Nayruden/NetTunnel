@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.IO;
+using System.Threading.Tasks;
+using System.Threading;
+using System.Net;
 
 namespace NetTunnel
 {
-    static class Program
+    static class Client
     {
         /// <summary>
         /// The main entry point for the application.
@@ -14,12 +18,6 @@ namespace NetTunnel
         [STAThread]
         static void Main()
         {
-            // Handle trace information
-            Trace.Listeners.Clear(); // Clear default listeners
-            Trace.Listeners.Add(new TextWriterTraceListener("output.txt"));
-            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
-            Trace.AutoFlush = true;
-
             // Default generated stuff
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

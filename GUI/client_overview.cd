@@ -10,15 +10,15 @@
   <Class Name="NetTunnel.MainWindow" Collapsed="true">
     <Position X="2.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAgABAAYACAAIAAASQDGCQACIBAAUAAEAkWgCIEAAAA=</HashCode>
+      <HashCode>AAgABAAYACAAIQAASQDGCQCCIBAAUACEBk2gCIFAAAA=</HashCode>
       <FileName>MainWindow.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="NetTunnel.Program" Collapsed="true">
+  <Class Name="NetTunnel.Client" Collapsed="true">
     <Position X="4" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
-      <FileName>Program.cs</FileName>
+      <FileName>Client.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NetTunnel.ServicesWindow" Collapsed="true">
@@ -95,11 +95,13 @@
       <Class Name="NetTunnel.Tunnel.TunnelManager">
         <Members>
           <Field Name="_cancel_token" Hidden="true" />
+          <Field Name="_disconnected_userids" Hidden="true" />
           <Field Name="_server_endpoint" Hidden="true" />
           <Field Name="_tunnels" Hidden="true" />
           <Field Name="_tunnels_to_add" Hidden="true" />
           <Method Name="AddWaitingTunnels" Hidden="true" />
           <Method Name="HandleData" Hidden="true" />
+          <Method Name="RemoveTunnelsOfDisconnectedUsers" Hidden="true" />
           <Method Name="SetupTunnels" Hidden="true" />
         </Members>
         <TypeIdentifier>

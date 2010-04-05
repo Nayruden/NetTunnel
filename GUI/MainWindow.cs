@@ -8,16 +8,65 @@ using System.Text;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using NetTunnel.Properties;
+using System.Threading;
+using System.Diagnostics;
+using System.Net;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace NetTunnel
 {
     public partial class MainWindow : Form
     {
+        private readonly CancellationTokenSource tunnel_thread_canceller;
+        private readonly CancellationTokenSource server_thread_canceller;
+        private readonly UserManager user_manager;
+        private readonly Tunnel.TunnelManager tunnel_manager;
+        private readonly ServerCommunicationHandler server_communication_handler;
+
         public MainWindow()
         {
             InitializeComponent();
 
             refreshServices();
+
+            ////////////////////////////
+            // Now setup new threads! //
+            ////////////////////////////
+            var server_endpoint = new IPEndPoint(Dns.GetHostAddresses("server.ulyssesmod.net")[0], 4141);
+
+            // Handle trace information
+            Trace.Listeners.Clear(); // Clear default listeners
+
+            // File listener
+            File.Delete("output.txt");
+            Trace.Listeners.Add(new TextWriterTraceListener("output.txt"));
+
+            // Console listener
+            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
+
+            // Always flush on every message
+            Trace.AutoFlush = true;
+
+            Trace.TraceInformation("Starting up...");
+
+            user_manager = new UserManager();
+
+            // Start the tunnel processing thread
+            tunnel_thread_canceller = new CancellationTokenSource();
+            Tunnel.TunnelManager tunnel_manager = new Tunnel.TunnelManager(tunnel_thread_canceller.Token, server_endpoint);
+            Task.Factory.StartNew(tunnel_manager.Run);
+
+            // Start the server socket processing thread
+            server_thread_canceller = new CancellationTokenSource();
+            server_communication_handler = new ServerCommunicationHandler(this, server_thread_canceller.Token, tunnel_manager, user_manager, server_endpoint);
+            Task.Factory.StartNew(server_communication_handler.Run);
+        }
+
+        public void Error( string str )
+        {
+            MessageBox.Show(this, str, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            Close();
         }
 
         public void nameChanged( string old_name, string new_name )
@@ -27,7 +76,7 @@ namespace NetTunnel
 
         private void servicesMenuToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var services_window = new ServicesWindow();
+            var services_window = new ServicesWindow( user_manager.local_user.services );
             var result = services_window.ShowDialog(this);
 
             refreshServices();
@@ -45,7 +94,7 @@ namespace NetTunnel
             servicesToolStripMenuItem.DropDownItems.Add(servicesMenuToolStripMenuItem);
             servicesToolStripMenuItem.DropDownItems.Add(toolStripLine);
 
-            foreach (var service in SharedServices.services)
+            foreach (var service in user_manager.local_user.services)
             {
                 var s = service; // Need to copy in for lamdba
                 var toolstrip_item = new ToolStripMenuItem();
@@ -109,6 +158,11 @@ namespace NetTunnel
             if (chatHistoryBox.SelectionLength > 0)
                 Clipboard.SetText(chatHistoryBox.SelectedText); // Copy to clipboard
             chatBox.Focus(); // Focus on box again
-        }      
+        }
+
+        private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
+        {
+
+        }   
     }
 }

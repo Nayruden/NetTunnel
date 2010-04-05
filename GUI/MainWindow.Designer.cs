@@ -52,15 +52,19 @@
             this.mainMenuStrip.SuspendLayout();
             this.chatTabControl.SuspendLayout();
             this.lobbyPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chatTabContainer)).BeginInit();
             this.chatTabContainer.Panel1.SuspendLayout();
             this.chatTabContainer.Panel2.SuspendLayout();
             this.chatTabContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chatContainer)).BeginInit();
             this.chatContainer.Panel1.SuspendLayout();
             this.chatContainer.Panel2.SuspendLayout();
             this.chatContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chatBoxContainer)).BeginInit();
             this.chatBoxContainer.Panel1.SuspendLayout();
             this.chatBoxContainer.Panel2.SuspendLayout();
             this.chatBoxContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.discoveryContainer)).BeginInit();
             this.discoveryContainer.Panel1.SuspendLayout();
             this.discoveryContainer.Panel2.SuspendLayout();
             this.discoveryContainer.SuspendLayout();
@@ -182,7 +186,7 @@
             this.chatContainer.Panel2.Controls.Add(this.chatBoxContainer);
             this.chatContainer.Panel2MinSize = 20;
             this.chatContainer.Size = new System.Drawing.Size(486, 506);
-            this.chatContainer.SplitterDistance = 482;
+            this.chatContainer.SplitterDistance = 477;
             this.chatContainer.TabIndex = 0;
             // 
             // chatHistoryBox
@@ -194,7 +198,7 @@
             this.chatHistoryBox.Name = "chatHistoryBox";
             this.chatHistoryBox.ReadOnly = true;
             this.chatHistoryBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.chatHistoryBox.Size = new System.Drawing.Size(486, 482);
+            this.chatHistoryBox.Size = new System.Drawing.Size(486, 477);
             this.chatHistoryBox.TabIndex = 0;
             this.chatHistoryBox.TextChanged += new System.EventHandler(this.chatHistoryBox_TextChanged);
             this.chatHistoryBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.chatHistoryBox_MouseUp);
@@ -214,7 +218,7 @@
             // chatBoxContainer.Panel2
             // 
             this.chatBoxContainer.Panel2.Controls.Add(this.sendButton);
-            this.chatBoxContainer.Size = new System.Drawing.Size(486, 20);
+            this.chatBoxContainer.Size = new System.Drawing.Size(486, 25);
             this.chatBoxContainer.SplitterDistance = 440;
             this.chatBoxContainer.TabIndex = 0;
             // 
@@ -224,7 +228,7 @@
             this.chatBox.Location = new System.Drawing.Point(0, 0);
             this.chatBox.Multiline = true;
             this.chatBox.Name = "chatBox";
-            this.chatBox.Size = new System.Drawing.Size(440, 20);
+            this.chatBox.Size = new System.Drawing.Size(440, 25);
             this.chatBox.TabIndex = 0;
             this.chatBox.TextChanged += new System.EventHandler(this.chatBox_TextChanged);
             this.chatBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.chatBox_KeyPress);
@@ -234,7 +238,7 @@
             this.sendButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sendButton.Location = new System.Drawing.Point(0, 0);
             this.sendButton.Name = "sendButton";
-            this.sendButton.Size = new System.Drawing.Size(42, 20);
+            this.sendButton.Size = new System.Drawing.Size(42, 25);
             this.sendButton.TabIndex = 0;
             this.sendButton.Text = "Send";
             this.sendButton.UseVisualStyleBackColor = true;
@@ -258,7 +262,7 @@
             this.discoveryContainer.Panel2.Controls.Add(this.servicesGroupBox);
             this.discoveryContainer.Panel2MinSize = 100;
             this.discoveryContainer.Size = new System.Drawing.Size(80, 506);
-            this.discoveryContainer.SplitterDistance = 288;
+            this.discoveryContainer.SplitterDistance = 125;
             this.discoveryContainer.TabIndex = 0;
             // 
             // usersGroupBox
@@ -268,7 +272,7 @@
             this.usersGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.usersGroupBox.Location = new System.Drawing.Point(0, 0);
             this.usersGroupBox.Name = "usersGroupBox";
-            this.usersGroupBox.Size = new System.Drawing.Size(80, 288);
+            this.usersGroupBox.Size = new System.Drawing.Size(80, 125);
             this.usersGroupBox.TabIndex = 0;
             this.usersGroupBox.TabStop = false;
             this.usersGroupBox.Text = "Users";
@@ -285,7 +289,7 @@
             "Trudy"});
             this.usersListBox.Location = new System.Drawing.Point(3, 16);
             this.usersListBox.Name = "usersListBox";
-            this.usersListBox.Size = new System.Drawing.Size(74, 269);
+            this.usersListBox.Size = new System.Drawing.Size(74, 106);
             this.usersListBox.TabIndex = 0;
             // 
             // servicesGroupBox
@@ -294,7 +298,7 @@
             this.servicesGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.servicesGroupBox.Location = new System.Drawing.Point(0, 0);
             this.servicesGroupBox.Name = "servicesGroupBox";
-            this.servicesGroupBox.Size = new System.Drawing.Size(80, 214);
+            this.servicesGroupBox.Size = new System.Drawing.Size(80, 377);
             this.servicesGroupBox.TabIndex = 0;
             this.servicesGroupBox.TabStop = false;
             this.servicesGroupBox.Text = "Services";
@@ -312,7 +316,7 @@
             this.servicesListBox.Location = new System.Drawing.Point(3, 16);
             this.servicesListBox.Name = "servicesListBox";
             this.servicesListBox.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.servicesListBox.Size = new System.Drawing.Size(74, 195);
+            this.servicesListBox.Size = new System.Drawing.Size(74, 358);
             this.servicesListBox.TabIndex = 0;
             // 
             // MainWindow
@@ -327,23 +331,28 @@
             this.MinimumSize = new System.Drawing.Size(400, 400);
             this.Name = "MainWindow";
             this.Text = "NetTunnel";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainWindow_FormClosed);
             this.mainMenuStrip.ResumeLayout(false);
             this.mainMenuStrip.PerformLayout();
             this.chatTabControl.ResumeLayout(false);
             this.lobbyPage.ResumeLayout(false);
             this.chatTabContainer.Panel1.ResumeLayout(false);
             this.chatTabContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chatTabContainer)).EndInit();
             this.chatTabContainer.ResumeLayout(false);
             this.chatContainer.Panel1.ResumeLayout(false);
             this.chatContainer.Panel1.PerformLayout();
             this.chatContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chatContainer)).EndInit();
             this.chatContainer.ResumeLayout(false);
             this.chatBoxContainer.Panel1.ResumeLayout(false);
             this.chatBoxContainer.Panel1.PerformLayout();
             this.chatBoxContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chatBoxContainer)).EndInit();
             this.chatBoxContainer.ResumeLayout(false);
             this.discoveryContainer.Panel1.ResumeLayout(false);
             this.discoveryContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.discoveryContainer)).EndInit();
             this.discoveryContainer.ResumeLayout(false);
             this.usersGroupBox.ResumeLayout(false);
             this.servicesGroupBox.ResumeLayout(false);

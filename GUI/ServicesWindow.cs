@@ -13,9 +13,12 @@ namespace NetTunnel
     public partial class ServicesWindow : Form
     {
         private Service modifying_service;
+        private readonly IList<Service> _services;
 
-        public ServicesWindow()
+        public ServicesWindow( IList<Service> services )
         {
+            _services = services;
+
             InitializeComponent();
 
             var bs = new BindingSource();
@@ -24,7 +27,7 @@ namespace NetTunnel
             servicesComboBox.SelectedIndex = -1;
 
             bs = new BindingSource();
-            bs.DataSource = SharedServices.services;
+            bs.DataSource = services;
             servicesListBox.DataSource = bs;
             servicesListBox.SelectedIndex = -1;
 
@@ -116,16 +119,7 @@ namespace NetTunnel
         {
             if (portsAndProtoListView.Items.Count == 0) return; // Not interested
 
-            Service service;
-            if (!modify)
-                service = new Service(serviceNameBox.Text);
-            else
-            {
-                service = (Service)servicesListBox.SelectedItem;
-                service.service_name = serviceNameBox.Text;
-            }
-
-            service.port_ranges = new PortRange[portsAndProtoListView.Items.Count];
+            var service = new Service(serviceNameBox.Text);
             foreach (ListViewItem item in portsAndProtoListView.Items)
             {
                 PortRange port_range = new PortRange();
@@ -155,16 +149,17 @@ namespace NetTunnel
 
                 port_range.protocols = protocols;
 
-                service.port_ranges[item.Index] = port_range;
+                service.port_ranges.Add( port_range );
             }
 
             var bs = (BindingSource)servicesListBox.DataSource;
-            if (!modify)
+            bs.Add(service);
+            if (modify)
             {
-                bs.Add(service);
+                bs.RemoveCurrent();
             }                            
 
-            SharedServices.services.Sort();
+            _services.Sort();
             refreshServices(); // Reordered, need to refresh
             servicesListBox.SelectedItem = service;
         }

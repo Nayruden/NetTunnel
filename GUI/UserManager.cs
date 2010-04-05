@@ -11,23 +11,21 @@ namespace NetTunnel
     public class UserManager
     {
         private Dictionary<ulong, User> _users = new Dictionary<ulong, User>();
-        private readonly User _local_user;
-
-        /// <param name="local_user">The user running this application.</param>
-        public UserManager(User local_user)
-        {
-            _local_user = local_user;
-        }
+        private User _local_user;
 
         /// <summary>
         /// The users this manager is managing.
         /// </summary>
-        public ICollection<User> users { get { return _users.Values; } }        
+        public ICollection<User> users { get { return _users.Values; } }
 
         /// <summary>
-        /// The user running this instance.
+        /// The user running this instance. When you set this, you don't need to call <see cref="Add"/>.
         /// </summary>
-        public User local_user { get { return _local_user; } }
+        public User local_user
+        {
+            get { return _local_user; }
+            set { Add(value); _local_user = value; }
+        }
 
         /// <summary>
         /// Finds a user by remote_userid.
@@ -37,7 +35,7 @@ namespace NetTunnel
         public User FindUserID(ulong userid)
         {
             User user;
-            _users.TryGetValue(userid, out user);         
+            _users.TryGetValue(userid, out user);
             return user;
         }
 
@@ -47,7 +45,7 @@ namespace NetTunnel
         /// <param name="user">The user to add.</param>
         public void Add(User user)
         {
-            _users.Add(user.userid, user);
+            _users[user.userid] = user;
         }
 
         /// <summary>
@@ -57,7 +55,10 @@ namespace NetTunnel
         /// <param name="userid">The userid to remove.</param>
         public void Remove(ulong userid)
         {
+            if ( userid == local_user.userid )
+                throw new ArgumentException("Cannot remove local user from user manager.");
+
             _users.Remove(userid);
-        }        
+        }
     }
 }

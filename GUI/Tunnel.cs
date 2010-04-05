@@ -44,12 +44,13 @@ namespace NetTunnel
             Connected
         }
 
-        public Tunnel(bool is_server, ulong remote_userid, Service service, ushort server_port)
+        public Tunnel(bool is_server, ulong remote_userid, Service service, Protocols protocols, ushort server_port)
         {
             _remote_userid = remote_userid;
             _is_server = is_server;
             _service = service;
             _server_port = server_port;
+            _protocols = protocols;
             state = TunnelState.Initial;
         }
 
@@ -109,6 +110,7 @@ namespace NetTunnel
         public class TunnelManager
         {
             private readonly List<Tunnel> _tunnels_to_add; // Must be accessed by lock
+            private readonly List<ulong> _disconnected_userids; // Must be accessed by lock
             private readonly List<Tunnel> _tunnels;
             private readonly CancellationToken _cancel_token;
             private readonly IPEndPoint _server_endpoint;
@@ -116,6 +118,7 @@ namespace NetTunnel
             public TunnelManager(CancellationToken cancel_token, IPEndPoint server_endpoint)
             {
                 _tunnels = new List<Tunnel>();
+                _disconnected_userids = new List<ulong>();
                 _tunnels_to_add = new List<Tunnel>();
                 _cancel_token = cancel_token;
                 _server_endpoint = server_endpoint;
@@ -127,9 +130,16 @@ namespace NetTunnel
             public void AddTunnel(Tunnel tunnel)
             {
                 lock (_tunnels_to_add)
-                {
                     _tunnels_to_add.Add(tunnel);
-                }
+            }
+
+            /// <summary>
+            /// Call with the userid of a disconnected user when they disconnect.
+            /// </summary>
+            public void InformUseridDisconnected(ulong userid)
+            {
+                lock (_disconnected_userids)
+                    _disconnected_userids.Add(userid);
             }
 
             /// <summary>
@@ -139,7 +149,14 @@ namespace NetTunnel
             {
                 while (!_cancel_token.IsCancellationRequested)
                 {
+                    RemoveTunnelsOfDisconnectedUsers();
                     AddWaitingTunnels();
+
+                    if (_tunnels.Count == 0)
+                    {
+                        Thread.Sleep(100); // Sleep 0.1 seconds and hope there's something waiting for us next time
+                        continue;
+                    }
 
                     // Future: Maybe make it so this only happens once a minute or something...
                     // Remove anything with a disabled service
@@ -179,6 +196,18 @@ namespace NetTunnel
                         HandleData(data, tunnel, ip_endpoint);
                         return;
                     });
+                }
+            }
+
+            private void RemoveTunnelsOfDisconnectedUsers()
+            {
+                lock (_disconnected_userids)
+                {
+                    if (_disconnected_userids.Count > 0)
+                    {
+                        _tunnels.RemoveAll(t => _disconnected_userids.Contains(t.remote_userid));
+                        _disconnected_userids.Clear();
+                    }
                 }
             }
 

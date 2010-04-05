@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ServicesWindow));
             this.servicesGroupBox = new System.Windows.Forms.GroupBox();
             this.servicesListBox = new System.Windows.Forms.CheckedListBox();
             this.editServiceGroupBox = new System.Windows.Forms.GroupBox();

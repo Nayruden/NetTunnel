@@ -118,7 +118,7 @@ namespace NetTunnel
         /// The name of the service. IE, 'apache'.
         /// </summary>
         [DataMember(Order = 1)]
-        public string service_name { get { return service_name; } }
+        public string service_name { get { return _service_name; } }
 
         /// <summary>
         /// Whether or not the service is enabled for the client. If the service is disabled it's not transmitted as part of your client update.
@@ -191,20 +191,6 @@ namespace NetTunnel
         {
             // Future: Make this into a hashmap if it grows large
             return services.FirstOrDefault(service => service.service_name == service_name);
-        }
-    }
-
-    /// <summary>
-    /// Services we are currently sharing with the world. TODO: REMOVE THIS.
-    /// </summary>
-    public class SharedServices
-    {
-        public static readonly List<Service> services = new List<Service>();
-
-        static SharedServices()
-        {
-            // TODO, persist and stuff
-            services.AddRange(new[] { KnownServices.get("Apache"), KnownServices.get("Ventrilo") });
         }
     }
 }
